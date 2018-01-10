@@ -38,7 +38,6 @@ public class Drivebase extends Subsystem
 	
 	public void set(ControlMode mode, double leftValue, double rightValue)
 	{
-		System.out.printf("Left Joystick: %.2f, Right Joystick: %.2f \n", leftValue, rightValue);
 		leftMotor1.set(mode, leftValue);
 		rightMotor1.set(mode, rightValue);
 	}
