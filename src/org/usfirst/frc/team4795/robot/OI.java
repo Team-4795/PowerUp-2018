@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI
 {
-	public static final double JOY_DEADZONE = 0.05;
+	public static final double JOY_DEADZONE = 0.1;
 
 	public final Joystick LEFT_JOY = new Joystick(RobotMap.LEFT_JOY.value);
 	public final Joystick RIGHT_JOY = new Joystick(RobotMap.RIGHT_JOY.value);

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4795.robot.subsystems;
 
+import org.usfirst.frc.team4795.robot.Robot;
 import org.usfirst.frc.team4795.robot.RobotMap;
 import org.usfirst.frc.team4795.robot.commands.TankDrive;
 
@@ -23,25 +24,23 @@ public class Drivebase extends Subsystem
 		rightMotor1 = new TalonSRX(RobotMap.RIGHT_MOTOR_1.value);
 		rightMotor2 = new TalonSRX(RobotMap.RIGHT_MOTOR_2.value);
 		
+		Robot.initTalon(leftMotor1);
+		Robot.initTalon(leftMotor2);
+		Robot.initTalon(rightMotor1);
+		Robot.initTalon(rightMotor2);
+		
 		leftMotor2.follow(leftMotor1);
 		rightMotor2.follow(rightMotor1);
 		
-		leftMotor1.setNeutralMode(NeutralMode.Brake);
-		leftMotor2.setNeutralMode(NeutralMode.Brake);
-		rightMotor1.setNeutralMode(NeutralMode.Brake);
-		rightMotor2.setNeutralMode(NeutralMode.Brake);
+		rightMotor1.setInverted(true);
+		rightMotor2.setInverted(true);
 	}
 	
 	public void set(ControlMode mode, double leftValue, double rightValue)
 	{
-		leftMotor1.set(mode, leftValue, rightValue);
-		rightMotor1.set(mode, leftValue, rightValue);
-	}
-	
-	public void set(ControlMode mode, double value)
-	{
-		leftMotor1.set(mode, value);
-		rightMotor2.set(mode, value);
+		System.out.printf("Left Joystick: %.2f, Right Joystick: %.2f \n", leftValue, rightValue);
+		leftMotor1.set(mode, leftValue);
+		rightMotor1.set(mode, rightValue);
 	}
 	
 	@Override
