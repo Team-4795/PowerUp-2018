@@ -23,7 +23,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 	public static final int I_ZONE_POS = 2000;
 
 	public static final double WHEEL_DIAMETER_IN = 8.0;
-	public static final int ENCODER_TICKS_PER_REV = 2048;
+	public static final int ENCODER_TICKS_PER_REV = 8192;
 	public static final double ENCODER_TICKS_PER_FT = (ENCODER_TICKS_PER_REV
 			* 48) / (Math.PI * WHEEL_DIAMETER_IN);
 
@@ -58,7 +58,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 		setIZone(I_ZONE_POS);
 		double distanceInTicks = feet * ENCODER_TICKS_PER_FT;
 		set(ControlMode.Position,
-				leftMotor1.getSensorCollection().getQuadraturePosition()
+				-leftMotor1.getSensorCollection().getQuadraturePosition()
 						+ distanceInTicks,
 				rightMotor1.getSensorCollection().getQuadraturePosition()
 						+ distanceInTicks);
@@ -69,17 +69,18 @@ public class Drivebase extends Subsystem implements PIDOutput
 		leftMotor1.config_kP(0, P, timeout);
 		leftMotor1.config_kI(0, I, timeout);
 		leftMotor1.config_kD(0, D, timeout);
-		leftMotor1.config_kF(0, 0.0, timeout);
+		leftMotor1.config_kF(0, F, timeout);
 
 		rightMotor1.config_kP(0, P, timeout);
 		rightMotor1.config_kI(0, I, timeout);
 		rightMotor1.config_kD(0, D, timeout);
-		rightMotor1.config_kF(0, 0.0, timeout);
+		rightMotor1.config_kF(0, F, timeout);
 	}
 
 	public void setIZone(int i)
 	{
 		leftMotor1.config_IntegralZone(0, i, 10);
+		rightMotor1.config_IntegralZone(0, i, 10);
 	}
 
 	@Override
@@ -94,4 +95,13 @@ public class Drivebase extends Subsystem implements PIDOutput
 		set(ControlMode.PercentOutput, output, output);
 	}
 
+	public int getleftEncoder()
+	{
+		return leftMotor1.getSensorCollection().getQuadraturePosition();
+	}
+	
+	public int getrightEncoder()
+	{
+		return rightMotor1.getSensorCollection().getQuadraturePosition();
+	}
 }

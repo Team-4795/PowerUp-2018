@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4795.robot;
 
+import org.usfirst.frc.team4795.robot.commands.DriveDistance;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -17,17 +18,17 @@ public class Robot extends TimedRobot
 {
 	public static OI oi;
 	public static Drivebase drivebase;
-	
-	SendableChooser<Command> m_chooser = new SendableChooser<>();
-	
+
 	@Override
 	public void robotInit()
 	{
 		drivebase = new Drivebase();
-		
 		oi = new OI();
-		//m_chooser.addDefault("Default Auto", new ExampleCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
+		
+		SmartDashboard.putNumber("P",0.0);
+		SmartDashboard.putNumber("I",0.0);
+		SmartDashboard.putNumber("D",0.0);
+		SmartDashboard.putNumber("F",0.0);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		
+		Scheduler.getInstance().add(new DriveDistance(5));
 	}
 
 	@Override
@@ -57,36 +58,34 @@ public class Robot extends TimedRobot
 	@Override
 	public void teleopInit()
 	{
-		
+
 	}
 
 	@Override
 	public void teleopPeriodic()
 	{
 		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("Left Encoder", (double) drivebase.getleftEncoder());
+		SmartDashboard.putNumber("Right Encoder", (double) drivebase.getrightEncoder());
 	}
 
 	@Override
 	public void testPeriodic()
 	{
-		
+
 	}
-	
+
 	public static void initTalon(TalonSRX motor)
 	{
 		motor.setNeutralMode(NeutralMode.Coast);
 		motor.neutralOutput();
 		motor.setSensorPhase(false);
-		motor.configForwardLimitSwitchSource(
-			LimitSwitchSource.FeedbackConnector,
-			LimitSwitchNormal.NormallyOpen,
-			0);
-		motor.configReverseLimitSwitchSource(
-			LimitSwitchSource.FeedbackConnector,
-			LimitSwitchNormal.NormallyOpen,
-			0);
+		motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+		motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 		motor.configNominalOutputForward(0.0, 0);
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
+
+		motor.getSensorCollection().setQuadraturePosition(0, 0);
 	}
 }
