@@ -25,10 +25,6 @@ public class Robot extends TimedRobot
 		drivebase = new Drivebase();
 		oi = new OI();
 		
-		SmartDashboard.putNumber("P",0.0);
-		SmartDashboard.putNumber("I",0.0);
-		SmartDashboard.putNumber("D",0.0);
-		SmartDashboard.putNumber("F",0.0);
 	}
 
 	@Override
@@ -46,7 +42,8 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		Scheduler.getInstance().add(new DriveDistance(5));
+		drivebase.hasDriven = false;
+		Scheduler.getInstance().add(new DriveDistance(7));
 	}
 
 	@Override
@@ -65,8 +62,7 @@ public class Robot extends TimedRobot
 	public void teleopPeriodic()
 	{
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Left Encoder", (double) drivebase.getleftEncoder());
-		SmartDashboard.putNumber("Right Encoder", (double) drivebase.getrightEncoder());
+		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
 	}
 
 	@Override
@@ -77,7 +73,7 @@ public class Robot extends TimedRobot
 
 	public static void initTalon(TalonSRX motor)
 	{
-		motor.setNeutralMode(NeutralMode.Coast);
+		motor.setNeutralMode(NeutralMode.Brake);
 		motor.neutralOutput();
 		motor.setSensorPhase(false);
 		motor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);

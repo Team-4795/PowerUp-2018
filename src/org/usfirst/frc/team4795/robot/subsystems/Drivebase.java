@@ -6,9 +6,14 @@ import org.usfirst.frc.team4795.robot.commands.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivebase extends Subsystem implements PIDOutput
 {
@@ -16,16 +21,25 @@ public class Drivebase extends Subsystem implements PIDOutput
 	private final TalonSRX leftMotor2;
 	private final TalonSRX rightMotor1;
 	private final TalonSRX rightMotor2;
+	private final AHRS ahrs;
 
-	public static final double P_POS = 0.8;
-	public static final double I_POS = 0.001;
-	public static final double D_POS = 1000.0;
-	public static final int I_ZONE_POS = 2000;
+	private final PIDController turnController;
+
+	public static final double kP = 0.03;
+	public static final double kI = 0.00;
+	public static final double kD = 0.00;
+	public static final double kF = 0.00;
+
+	public static final double kToleranceDegrees = 2.0f;
 
 	public static final double WHEEL_DIAMETER_IN = 8.0;
-	public static final int ENCODER_TICKS_PER_REV = 8192;
-	public static final double ENCODER_TICKS_PER_FT = (ENCODER_TICKS_PER_REV
-			* 48) / (Math.PI * WHEEL_DIAMETER_IN);
+	public static final int ENCODER_TICKS_PER_REV = 2048;
+	public static final double ENCODER_TICKS_PER_FT = (ENCODER_TICKS_PER_REV * 48) / (Math.PI * WHEEL_DIAMETER_IN);
+
+	private int leftTarget;
+	private int rightTarget;
+	public boolean hasDriven;
+	private double distanceInTicks;
 
 	public Drivebase()
 	{
@@ -33,6 +47,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 		leftMotor2 = new TalonSRX(RobotMap.LEFT_MOTOR_2.value);
 		rightMotor1 = new TalonSRX(RobotMap.RIGHT_MOTOR_1.value);
 		rightMotor2 = new TalonSRX(RobotMap.RIGHT_MOTOR_2.value);
+		ahrs = new AHRS(SPI.Port.kMXP);
 
 		Robot.initTalon(leftMotor1);
 		Robot.initTalon(leftMotor2);
@@ -44,6 +59,13 @@ public class Drivebase extends Subsystem implements PIDOutput
 
 		rightMotor1.setInverted(true);
 		rightMotor2.setInverted(true);
+
+		turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
+		turnController.setInputRange(-180.0f, 180.0f);
+		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setAbsoluteTolerance(kToleranceDegrees);
+		turnController.setContinuous(true);
+
 	}
 
 	public void set(ControlMode mode, double leftValue, double rightValue)
@@ -52,16 +74,35 @@ public class Drivebase extends Subsystem implements PIDOutput
 		rightMotor1.set(mode, rightValue);
 	}
 
+	public void rotateDegrees(double angle)
+	{
+		turnController.reset();
+		turnController.setPID(kP, kI, kD, 0.0);
+		turnController.setSetpoint(getYaw() + angle);
+		turnController.enable();
+	}
+
 	public void driveFeet(double feet)
 	{
-		setPIDF(P_POS, I_POS, D_POS, 0.0, 10);
-		setIZone(I_ZONE_POS);
-		double distanceInTicks = feet * ENCODER_TICKS_PER_FT;
-		set(ControlMode.Position,
-				-leftMotor1.getSensorCollection().getQuadraturePosition()
-						+ distanceInTicks,
-				rightMotor1.getSensorCollection().getQuadraturePosition()
-						+ distanceInTicks);
+		if (!hasDriven)
+		{
+			distanceInTicks = feet * ENCODER_TICKS_PER_FT;
+			leftTarget = (int) (getleftEncoder() + distanceInTicks);
+			rightTarget = (int) (getrightEncoder() + distanceInTicks);
+			hasDriven = true;
+		} else
+		{
+			double leftSpeed = Math.pow((leftTarget - getleftEncoder()) / distanceInTicks, .5);
+			double rightSpeed = Math.pow((rightTarget - getrightEncoder()) / distanceInTicks, .5);
+			if (Math.abs(leftSpeed) < 0.05 || Math.abs(rightSpeed) < 0.05)
+			{
+				leftSpeed = 0;
+				rightSpeed = 0;
+			}
+			SmartDashboard.putNumber("Target Ticks", leftTarget);
+
+			set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
+		}
 	}
 
 	public void setPIDF(double P, double I, double D, double F, int timeout)
@@ -92,16 +133,21 @@ public class Drivebase extends Subsystem implements PIDOutput
 	@Override
 	public void pidWrite(double output)
 	{
-		set(ControlMode.PercentOutput, output, output);
+		set(ControlMode.PercentOutput, -output, output);
 	}
 
 	public int getleftEncoder()
 	{
-		return leftMotor1.getSensorCollection().getQuadraturePosition();
+		return -leftMotor1.getSensorCollection().getQuadraturePosition();
 	}
-	
+
 	public int getrightEncoder()
 	{
 		return rightMotor1.getSensorCollection().getQuadraturePosition();
+	}
+
+	public double getYaw()
+	{
+		return ahrs.getYaw();
 	}
 }
