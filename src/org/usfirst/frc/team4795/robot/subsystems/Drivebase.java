@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivebase extends Subsystem implements PIDOutput
@@ -25,14 +26,14 @@ public class Drivebase extends Subsystem implements PIDOutput
 
 	private final PIDController turnController;
 
-	public static final double kP = 0.03;
+	public static final double kP = -0.03;
 	public static final double kI = 0.00;
 	public static final double kD = 0.00;
 	public static final double kF = 0.00;
 
 	public static final double kToleranceDegrees = 2.0f;
 
-	public static final double WHEEL_DIAMETER_IN = 8.0;
+	public static final double WHEEL_DIAMETER_IN = 4.0;
 	public static final int ENCODER_TICKS_PER_REV = 2048;
 	public static final double ENCODER_TICKS_PER_FT = (ENCODER_TICKS_PER_REV * 48) / (Math.PI * WHEEL_DIAMETER_IN);
 
@@ -48,7 +49,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 		rightMotor1 = new TalonSRX(RobotMap.RIGHT_MOTOR_1.value);
 		rightMotor2 = new TalonSRX(RobotMap.RIGHT_MOTOR_2.value);
 		ahrs = new AHRS(SPI.Port.kMXP);
-
+		//P = 0.002
 		Robot.initTalon(leftMotor1);
 		Robot.initTalon(leftMotor2);
 		Robot.initTalon(rightMotor1);
@@ -62,9 +63,10 @@ public class Drivebase extends Subsystem implements PIDOutput
 
 		turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
 		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setOutputRange(-0.3, 0.3);
 		turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
+		LiveWindow.add(turnController);
 
 	}
 
@@ -94,7 +96,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 		{
 			double leftSpeed = Math.pow((leftTarget - getleftEncoder()) / distanceInTicks, .5);
 			double rightSpeed = Math.pow((rightTarget - getrightEncoder()) / distanceInTicks, .5);
-			if (Math.abs(leftSpeed) < 0.05 || Math.abs(rightSpeed) < 0.05)
+			if (Math.abs(leftSpeed) < 0.02 || Math.abs(rightSpeed) < 0.02)
 			{
 				leftSpeed = 0;
 				rightSpeed = 0;

@@ -11,8 +11,9 @@ public enum RobotMap
     // Joystick mappings
     LEFT_JOY(0),
     RIGHT_JOY(1),
+    XBOX_CONTROLLER(1),
     MANIPULATOR(2);
-
+	
     public final int value;
 
     RobotMap(int value) {

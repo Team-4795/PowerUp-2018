@@ -24,7 +24,7 @@ public class Robot extends TimedRobot
 	{
 		drivebase = new Drivebase();
 		oi = new OI();
-		
+
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot
 	public void autonomousInit()
 	{
 		drivebase.hasDriven = false;
-		Scheduler.getInstance().add(new DriveDistance(7));
+		Scheduler.getInstance().add(new DriveDistance(10));
 	}
 
 	@Override
@@ -63,12 +63,14 @@ public class Robot extends TimedRobot
 	{
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
+		SmartDashboard.putNumber("Right Encoder", drivebase.getrightEncoder());
+		SmartDashboard.putNumber("Left Encoder", drivebase.getleftEncoder());
 	}
 
 	@Override
 	public void testPeriodic()
 	{
-
+		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
 	}
 
 	public static void initTalon(TalonSRX motor)
