@@ -4,10 +4,10 @@ public enum RobotMap
 {
     // CAN motor controllers
     LEFT_MOTOR_1(5),
-    LEFT_MOTOR_2(1),
+    LEFT_MOTOR_2(3),
     RIGHT_MOTOR_1(6),
-    RIGHT_MOTOR_2(4),
-    ARM_MOTOR(2),
+    RIGHT_MOTOR_2(2),
+    ARM_MOTOR(1),
     // Joystick mappings
     LEFT_JOY(0),
     RIGHT_JOY(1),

@@ -13,7 +13,11 @@ public class TurnToAngle extends Command
 	double I;
 	double D;
 	double F;
-
+	
+	boolean isFinished = false;
+	boolean inErrorZone = false;
+	int count;
+	
 	public TurnToAngle(double angle)
 	{
 		requires(Robot.drivebase);
@@ -27,12 +31,34 @@ public class TurnToAngle extends Command
 
 	protected void execute()
 	{
-
+		double error = Robot.drivebase.turnController.getError();
+		inErrorZone = Math.abs(error) < 3 ? true : false;
+		
+		if(inErrorZone)
+		{
+			count++;
+			if(count >= 10)
+			{
+				isFinished = true;	
+			}
+			else
+			{
+				isFinished = false;
+			}
+		}
+		else
+		{
+			count = 0;
+		}
 	}
 
 	protected boolean isFinished()
 	{
-		return false;
+		return isFinished;
 	}
 
+	protected void end()
+	{
+		Robot.drivebase.turnController.disable();
+	}
 }

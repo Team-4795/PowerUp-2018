@@ -24,7 +24,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 	private final TalonSRX rightMotor2;
 	private final AHRS ahrs;
 
-	private final PIDController turnController;
+	public final PIDController turnController;
 
 	public static final double kP = -0.03;
 	public static final double kI = 0.00;
@@ -49,7 +49,7 @@ public class Drivebase extends Subsystem implements PIDOutput
 		rightMotor1 = new TalonSRX(RobotMap.RIGHT_MOTOR_1.value);
 		rightMotor2 = new TalonSRX(RobotMap.RIGHT_MOTOR_2.value);
 		ahrs = new AHRS(SPI.Port.kMXP);
-		//P = 0.002
+		// P = 0.002
 		Robot.initTalon(leftMotor1);
 		Robot.initTalon(leftMotor2);
 		Robot.initTalon(rightMotor1);
@@ -78,14 +78,19 @@ public class Drivebase extends Subsystem implements PIDOutput
 
 	public void rotateDegrees(double angle)
 	{
+		double setpoint = ((getYaw() + angle) % 360) - 180;
+		SmartDashboard.putNumber("Setpoint", setpoint);
+		SmartDashboard.putNumber("Yaw", getYaw());
+		ahrs.reset();
 		turnController.reset();
 		turnController.setPID(kP, kI, kD, 0.0);
-		turnController.setSetpoint(getYaw() + angle);
+		turnController.setSetpoint(angle);
 		turnController.enable();
 	}
 
-	public void driveFeet(double feet)
+	public boolean driveFeet(double feet)
 	{
+		boolean isFinished = false;
 		if (!hasDriven)
 		{
 			distanceInTicks = feet * ENCODER_TICKS_PER_FT;
@@ -96,15 +101,18 @@ public class Drivebase extends Subsystem implements PIDOutput
 		{
 			double leftSpeed = Math.pow((leftTarget - getleftEncoder()) / distanceInTicks, .5);
 			double rightSpeed = Math.pow((rightTarget - getrightEncoder()) / distanceInTicks, .5);
-			if (Math.abs(leftSpeed) < 0.02 || Math.abs(rightSpeed) < 0.02)
+			if (Math.abs(leftSpeed) < 0.50 || Math.abs(rightSpeed) < 0.50)
 			{
 				leftSpeed = 0;
 				rightSpeed = 0;
+				hasDriven = false;
+				isFinished = true;
 			}
 			SmartDashboard.putNumber("Target Ticks", leftTarget);
-
+			
 			set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
 		}
+		return isFinished;
 	}
 
 	public void setPIDF(double P, double I, double D, double F, int timeout)

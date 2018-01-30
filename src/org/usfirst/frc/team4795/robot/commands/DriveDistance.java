@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveDistance extends Command
 {
 	double Feet;
-	
+
 	double P;
 	double I;
 	double D;
 	double F;
-	
+
+	boolean isFinished = false;
+
 	public DriveDistance(double feet)
 	{
 		requires(Robot.drivebase);
@@ -24,19 +26,19 @@ public class DriveDistance extends Command
 
 	protected void initialize()
 	{
-		
+		System.out.println("Drive Distance Init");
 	}
 
 	protected void execute()
 	{
-		Robot.drivebase.driveFeet(Feet);
-		
+		isFinished = Robot.drivebase.driveFeet(Feet);
+
 		SmartDashboard.putNumber("Right Encoder", Robot.drivebase.getrightEncoder());
 		SmartDashboard.putNumber("Left Encoder", Robot.drivebase.getleftEncoder());
 	}
 
 	protected boolean isFinished()
 	{
-		return false;
+		return isFinished;
 	}
 }

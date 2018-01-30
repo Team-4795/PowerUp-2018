@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4795.robot;
 
+import org.usfirst.frc.team4795.robot.commands.CVJesus;
 import org.usfirst.frc.team4795.robot.commands.DriveDistance;
+import org.usfirst.frc.team4795.robot.commands.TurnToAngle;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -18,13 +20,16 @@ public class Robot extends TimedRobot
 {
 	public static OI oi;
 	public static Drivebase drivebase;
-
+	
+	Command CVJUSUS;
+	
 	@Override
 	public void robotInit()
 	{
 		drivebase = new Drivebase();
 		oi = new OI();
-
+		
+		CVJUSUS = new CVJesus();
 	}
 
 	@Override
@@ -43,7 +48,7 @@ public class Robot extends TimedRobot
 	public void autonomousInit()
 	{
 		drivebase.hasDriven = false;
-		Scheduler.getInstance().add(new DriveDistance(10));
+		CVJUSUS.start();
 	}
 
 	@Override
