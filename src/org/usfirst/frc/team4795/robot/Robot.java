@@ -3,12 +3,14 @@ package org.usfirst.frc.team4795.robot;
 import org.usfirst.frc.team4795.robot.commands.CVJesus;
 import org.usfirst.frc.team4795.robot.commands.DriveDistance;
 import org.usfirst.frc.team4795.robot.commands.TurnToAngle;
+import org.usfirst.frc.team4795.robot.subsystems.Arm;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,6 +22,7 @@ public class Robot extends TimedRobot
 {
 	public static OI oi;
 	public static Drivebase drivebase;
+	public static Arm arm;
 	
 	Command CVJUSUS;
 	
@@ -27,6 +30,7 @@ public class Robot extends TimedRobot
 	public void robotInit()
 	{
 		drivebase = new Drivebase();
+		arm = new Arm();
 		oi = new OI();
 		
 		CVJUSUS = new CVJesus();
@@ -91,4 +95,15 @@ public class Robot extends TimedRobot
 
 		motor.getSensorCollection().setQuadraturePosition(0, 0);
 	}
+	
+	public static void initVictor(VictorSPX motor)
+	{
+		motor.setNeutralMode(NeutralMode.Brake);
+		motor.neutralOutput();
+		motor.setSensorPhase(false);
+		motor.configNominalOutputForward(0.0, 0);
+		motor.configNominalOutputReverse(0.0, 0);
+		motor.configClosedloopRamp(0.5, 0);
+	}
+	
 }

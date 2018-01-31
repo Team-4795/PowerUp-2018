@@ -6,6 +6,7 @@ import org.usfirst.frc.team4795.robot.commands.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drivebase extends Subsystem implements PIDOutput
 {
 	private final TalonSRX leftMotor1;
-	private final TalonSRX leftMotor2;
+	private final VictorSPX leftMotor2;
 	private final TalonSRX rightMotor1;
 	private final TalonSRX rightMotor2;
 	private final AHRS ahrs;
@@ -45,13 +46,13 @@ public class Drivebase extends Subsystem implements PIDOutput
 	public Drivebase()
 	{
 		leftMotor1 = new TalonSRX(RobotMap.LEFT_MOTOR_1.value);
-		leftMotor2 = new TalonSRX(RobotMap.LEFT_MOTOR_2.value);
+		leftMotor2 = new VictorSPX(RobotMap.LEFT_MOTOR_2.value);
 		rightMotor1 = new TalonSRX(RobotMap.RIGHT_MOTOR_1.value);
 		rightMotor2 = new TalonSRX(RobotMap.RIGHT_MOTOR_2.value);
 		ahrs = new AHRS(SPI.Port.kMXP);
 		// P = 0.002
 		Robot.initTalon(leftMotor1);
-		Robot.initTalon(leftMotor2);
+		Robot.initVictor(leftMotor2);
 		Robot.initTalon(rightMotor1);
 		Robot.initTalon(rightMotor2);
 
