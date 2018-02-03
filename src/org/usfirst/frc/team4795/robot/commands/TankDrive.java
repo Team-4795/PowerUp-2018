@@ -5,6 +5,7 @@ import org.usfirst.frc.team4795.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class TankDrive extends Command

@@ -42,9 +42,21 @@ public class OI
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	
+	public double getXRightJoyX()
+	{
+		double raw = XBOX_JOY.getRawAxis(4);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
 	public double getXLeftJoyY()
 	{
 		double raw = XBOX_JOY.getRawAxis(1);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
+	public double getXLeftJoyX()
+	{
+		double raw = XBOX_JOY.getRawAxis(0);
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	

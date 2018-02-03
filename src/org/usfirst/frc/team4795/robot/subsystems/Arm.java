@@ -5,6 +5,8 @@ import org.usfirst.frc.team4795.robot.RobotMap;
 import org.usfirst.frc.team4795.robot.commands.ManualArmControl;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,6 +20,8 @@ public class Arm extends Subsystem
 	{
 		armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
 		Robot.initTalon(armMotor);
+		armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
+		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
 	}
 	
 	public void setRaw(double value)
