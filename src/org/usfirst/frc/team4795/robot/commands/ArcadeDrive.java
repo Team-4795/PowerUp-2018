@@ -40,7 +40,7 @@ boolean fastMode = false;
 		double outputLeft = JoyYValue;
 		double outputRight = JoyYValue;
 		
-		double difference = JoyXValue / 3;
+		double difference = JoyXValue / 2;
 		
 		double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
 

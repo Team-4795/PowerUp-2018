@@ -8,11 +8,17 @@ public enum RobotMap
     RIGHT_MOTOR_1(6),
     RIGHT_MOTOR_2(2),
     ARM_MOTOR(1),
+    //PWM Mappings
+    INTAKE_LEFT(0),
+    INTAKE_RIGHT(1),
     // Joystick mappings
     LEFT_JOY(0),
     RIGHT_JOY(1),
     XBOX_CONTROLLER(1),
-    MANIPULATOR(2);
+    MANIPULATOR(2),
+	//Button Mappings
+	INTAKE_IN(5),
+	INTAKE_OUT(6);
 	
     public final int value;
 

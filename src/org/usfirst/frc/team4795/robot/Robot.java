@@ -1,10 +1,14 @@
 package org.usfirst.frc.team4795.robot;
 
+import org.usfirst.frc.team4795.robot.commands.ArmToPos;
 import org.usfirst.frc.team4795.robot.commands.CVJesus;
 import org.usfirst.frc.team4795.robot.commands.DriveDistance;
+import org.usfirst.frc.team4795.robot.commands.LeftSideAuto;
+import org.usfirst.frc.team4795.robot.commands.RightSideAuto;
 import org.usfirst.frc.team4795.robot.commands.TurnToAngle;
 import org.usfirst.frc.team4795.robot.subsystems.Arm;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
+import org.usfirst.frc.team4795.robot.subsystems.Intake;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -23,7 +27,7 @@ public class Robot extends TimedRobot
 	public static OI oi;
 	public static Drivebase drivebase;
 	public static Arm arm;
-	
+	public static Intake intake;
 	Command CVJUSUS;
 	
 	@Override
@@ -31,9 +35,10 @@ public class Robot extends TimedRobot
 	{
 		drivebase = new Drivebase();
 		arm = new Arm();
+		intake = new Intake();
 		oi = new OI();
 		
-		CVJUSUS = new CVJesus();
+		CVJUSUS = new ArmToPos();
 	}
 
 	@Override
@@ -51,13 +56,20 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
+		arm.kP = 0;
+		arm.kI = 0;
+		arm.kD = 0;
+		
 		drivebase.hasDriven = false;
 		CVJUSUS.start();
+		//Scheduler.getInstance().add(new ArmToPos());
 	}
 
 	@Override
 	public void autonomousPeriodic()
 	{
+		arm.resetEncoder();
+		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
 		Scheduler.getInstance().run();
 	}
 
@@ -71,9 +83,11 @@ public class Robot extends TimedRobot
 	public void teleopPeriodic()
 	{
 		Scheduler.getInstance().run();
+		arm.resetEncoder();
 		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
 		SmartDashboard.putNumber("Right Encoder", drivebase.getrightEncoder());
 		SmartDashboard.putNumber("Left Encoder", drivebase.getleftEncoder());
+		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
 	}
 
 	@Override
