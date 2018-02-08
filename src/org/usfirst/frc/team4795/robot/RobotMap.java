@@ -11,6 +11,11 @@ public enum RobotMap
     //PWM Mappings
     INTAKE_LEFT(0),
     INTAKE_RIGHT(1),
+    //DIO Mappings
+    LED_RED(0),
+    LED_BLUE(1),
+    LED_GREEN(2),
+    INTAKE_LIMIT(3),
     // Joystick mappings
     LEFT_JOY(0),
     RIGHT_JOY(1),

@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -28,6 +29,10 @@ public class Robot extends TimedRobot
 	public static Drivebase drivebase;
 	public static Arm arm;
 	public static Intake intake;
+	
+	public static DigitalOutput ledStripRed;
+	public static DigitalOutput ledStripBlue;
+	public static DigitalOutput ledStripGreen;
 	Command CVJUSUS;
 	
 	@Override
@@ -37,6 +42,10 @@ public class Robot extends TimedRobot
 		arm = new Arm();
 		intake = new Intake();
 		oi = new OI();
+		
+		ledStripRed = new DigitalOutput(RobotMap.LED_RED.value);
+		ledStripGreen = new DigitalOutput(RobotMap.LED_GREEN.value);
+		ledStripBlue = new DigitalOutput(RobotMap.LED_BLUE.value);
 		
 		CVJUSUS = new ArmToPos();
 	}

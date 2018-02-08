@@ -55,6 +55,21 @@ boolean fastMode = false;
 		outputRight = Math.min(1, outputRight);
 		*/
 		
+		if(outputLeft > 0)
+			Robot.ledStripGreen.set(true);
+		else if(outputLeft < 0)
+		{
+			Robot.ledStripGreen.set(true);
+			Robot.ledStripRed.set(true);
+		}
+		else
+		{
+			Robot.ledStripGreen.set(false);
+			Robot.ledStripRed.set(false);
+			Robot.ledStripBlue.set(false);
+		}
+		
+		
 		Robot.drivebase.set(ControlMode.PercentOutput, outputLeft * throttle,
 				outputRight * throttle);
 		

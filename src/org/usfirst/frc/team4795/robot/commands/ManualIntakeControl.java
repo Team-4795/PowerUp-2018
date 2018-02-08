@@ -4,6 +4,7 @@ import org.usfirst.frc.team4795.robot.Robot;
 import org.usfirst.frc.team4795.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ManualIntakeControl extends Command
 {
@@ -28,7 +29,7 @@ public class ManualIntakeControl extends Command
 		else if(isRequestingOut)
 			Robot.intake.variableIntake(-0.5);
 		else
-			Robot.intake.variableIntake(0);
+			Robot.intake.holdBox();
 	}
 
 	protected boolean isFinished()

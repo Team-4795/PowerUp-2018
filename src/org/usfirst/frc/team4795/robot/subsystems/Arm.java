@@ -93,6 +93,16 @@ public class Arm extends Subsystem
 		return armMotor.getSensorCollection().getQuadratureVelocity();
 	}
 	
+	public boolean getRevLimitSwitch()
+	{
+		return armMotor.getSensorCollection().isRevLimitSwitchClosed();
+	}
+	
+	public boolean getFwdLimitSwitch()
+	{
+		return armMotor.getSensorCollection().isFwdLimitSwitchClosed();
+	}
+
 	public void clearAccum()
 	{
 		armMotor.setIntegralAccumulator(0, 0, 0);
@@ -100,7 +110,7 @@ public class Arm extends Subsystem
 	
 	public void resetEncoder()
 	{
-		if (!armMotor.getSensorCollection().isRevLimitSwitchClosed())
+		if (!getRevLimitSwitch())
 		{
 			armMotor.getSensorCollection().setQuadraturePosition(0, 0);
 		}
