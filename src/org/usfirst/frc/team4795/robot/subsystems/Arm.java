@@ -42,6 +42,10 @@ public class Arm extends Subsystem
 				0);
 		armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		
+		//THESE ARE PERSISTANT, THEY MUST BE CHANGED, THEY WILL NOT RESET ON THEIR OWN
+		armMotor.configPeakOutputForward(1, 0);
+		armMotor.configPeakOutputReverse(-1, 0);
+		
 		SmartDashboard.putNumber("P", kP);
 		SmartDashboard.putNumber("I", kI);
 		SmartDashboard.putNumber("D", kD);
@@ -110,7 +114,7 @@ public class Arm extends Subsystem
 	
 	public void resetEncoder()
 	{
-		if (!getRevLimitSwitch())
+		if (!getFwdLimitSwitch())
 		{
 			armMotor.getSensorCollection().setQuadraturePosition(0, 0);
 		}
