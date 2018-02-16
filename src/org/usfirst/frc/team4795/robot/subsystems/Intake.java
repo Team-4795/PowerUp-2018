@@ -11,33 +11,45 @@ public class Intake extends Subsystem
 {
 	private final Spark leftIntake;
 	private final Spark rightIntake;
-	private final DigitalInput limitSwitch;
-
+	
+	private final DigitalInput limitSwitch0;
+	private final DigitalInput limitSwitch1;
 	private final double holdSpeed = 0.1;
 
 	public Intake()
 	{
 		leftIntake = new Spark(RobotMap.INTAKE_LEFT.value);
 		rightIntake = new Spark(RobotMap.INTAKE_RIGHT.value);
-		limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT.value);
+		limitSwitch0 = new DigitalInput(RobotMap.INTAKE_LIMIT.value);
+		limitSwitch1 = new DigitalInput(RobotMap.INTAKE_LIMIT_TILT.value);
 	}
 
 	// Intake with variable speed/direction
-	public void variableIntake(double speed)
+	public void variableIntake(double speed, double speed2)
 	{
 		leftIntake.set(speed);
-		rightIntake.set(-speed);
+		rightIntake.set(-speed2);
 	}
 
 	public void holdBox()
 	{
-		if (limitSwitch.get())
+		if (hasBox())
 		{
 			leftIntake.set(holdSpeed);
 			rightIntake.set(-holdSpeed);
 		}
+		else
+		{
+			leftIntake.set(0);
+			rightIntake.set(0);
+		}
 	}
 
+	public boolean hasBox()
+	{
+		return (!limitSwitch0.get() || limitSwitch1.get());
+	}
+	
 	@Override
 	protected void initDefaultCommand()
 	{

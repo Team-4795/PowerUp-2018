@@ -81,8 +81,6 @@ public class Drivebase extends Subsystem implements PIDOutput
 	public void rotateDegrees(double angle)
 	{
 		double setpoint = ((getYaw() + angle) % 360) - 180;
-		SmartDashboard.putNumber("Setpoint", setpoint);
-		SmartDashboard.putNumber("Yaw", getYaw());
 		ahrs.reset();
 		turnController.reset();
 		turnController.setPID(kP, kI, kD, 0.0);
@@ -110,8 +108,6 @@ public class Drivebase extends Subsystem implements PIDOutput
 				hasDriven = false;
 				isFinished = true;
 			}
-			SmartDashboard.putNumber("Target Ticks", leftTarget);
-			
 			set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
 		}
 		return isFinished;

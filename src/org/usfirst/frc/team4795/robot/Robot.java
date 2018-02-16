@@ -1,5 +1,8 @@
 package org.usfirst.frc.team4795.robot;
 
+import java.nio.ByteBuffer;
+import java.util.BitSet;
+
 import org.usfirst.frc.team4795.robot.commands.ArmToPos;
 import org.usfirst.frc.team4795.robot.commands.CVJesus;
 import org.usfirst.frc.team4795.robot.commands.DriveDistance;
@@ -16,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -29,12 +33,18 @@ public class Robot extends TimedRobot
 	public static Drivebase drivebase;
 	public static Arm arm;
 	public static Intake intake;
-	
+
 	public static DigitalOutput ledStripRed;
 	public static DigitalOutput ledStripBlue;
 	public static DigitalOutput ledStripGreen;
+
+	public static DigitalInput selecterBit0;
+	public static DigitalInput selecterBit1;
+	public static DigitalInput selecterBit2;
 	Command CVJUSUS;
-	
+
+	public static BitSet selecterNumber;
+
 	@Override
 	public void robotInit()
 	{
@@ -42,12 +52,32 @@ public class Robot extends TimedRobot
 		arm = new Arm();
 		intake = new Intake();
 		oi = new OI();
-		
+
 		ledStripRed = new DigitalOutput(RobotMap.LED_RED.value);
 		ledStripGreen = new DigitalOutput(RobotMap.LED_GREEN.value);
 		ledStripBlue = new DigitalOutput(RobotMap.LED_BLUE.value);
-		
-		CVJUSUS = new ArmToPos();
+
+		selecterBit0 = new DigitalInput(RobotMap.SELECTER_BIT_0.value);
+		selecterBit1 = new DigitalInput(RobotMap.SELECTER_BIT_1.value);
+		selecterBit2 = new DigitalInput(RobotMap.SELECTER_BIT_2.value);
+		selecterNumber = new BitSet(3);
+
+		CVJUSUS = new ArmToPos(true, true);
+	}
+
+	public void robotPeriodic()
+	{
+		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
+		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
+		SmartDashboard.putNumber("Right Encoder", drivebase.getrightEncoder());
+		SmartDashboard.putNumber("Left Encoder", drivebase.getleftEncoder());
+		SmartDashboard.putBoolean("Has Box?", intake.hasBox());
+
+		selecterNumber.set(0, selecterBit0.get());
+		selecterNumber.set(1, selecterBit1.get());
+		selecterNumber.set(2, selecterBit2.get());
+
+		SmartDashboard.putNumber("Selecter", convertBitSet(selecterNumber));
 	}
 
 	@Override
@@ -65,20 +95,14 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		arm.kP = 0;
-		arm.kI = 0;
-		arm.kD = 0;
-		
 		drivebase.hasDriven = false;
 		CVJUSUS.start();
-		//Scheduler.getInstance().add(new ArmToPos());
 	}
 
 	@Override
 	public void autonomousPeriodic()
 	{
 		arm.resetEncoder();
-		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
 		Scheduler.getInstance().run();
 	}
 
@@ -93,16 +117,11 @@ public class Robot extends TimedRobot
 	{
 		Scheduler.getInstance().run();
 		arm.resetEncoder();
-		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
-		SmartDashboard.putNumber("Right Encoder", drivebase.getrightEncoder());
-		SmartDashboard.putNumber("Left Encoder", drivebase.getleftEncoder());
-		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
 	}
 
 	@Override
 	public void testPeriodic()
 	{
-		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
 	}
 
 	public static void initTalon(TalonSRX motor)
@@ -118,7 +137,7 @@ public class Robot extends TimedRobot
 
 		motor.getSensorCollection().setQuadraturePosition(0, 0);
 	}
-	
+
 	public static void initVictor(VictorSPX motor)
 	{
 		motor.setNeutralMode(NeutralMode.Brake);
@@ -128,5 +147,15 @@ public class Robot extends TimedRobot
 		motor.configNominalOutputReverse(0.0, 0);
 		motor.configClosedloopRamp(0.5, 0);
 	}
-	
+
+	public static long convertBitSet(BitSet bits)
+	{
+		long value = 0L;
+		for (int i = 0; i < bits.length(); ++i)
+		{
+			value += bits.get(i) ? (1L << i) : 0L;
+		}
+		return value;
+	}
+
 }

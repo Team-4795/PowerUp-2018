@@ -27,9 +27,14 @@ public class Arm extends Subsystem
 	public static double kD = 0.00;
 	public static double kF = 0.00;
 	public static int IZone = 10;
-	
+
 	public static final int kToleranceTicks = 50;
 	public static final int ENCODER_TICKS_PER_REV = 2048;
+
+	public static final double NO_BOX_INITIAL_TORQUE = 0.3;
+	public static final double BOX_INITIAL_TORQUE = 0.5;
+	
+	public static final double BATTLE_MODE_TORQUE_ADDITION = 0.2;
 	public Arm()
 	{
 		armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
@@ -41,18 +46,11 @@ public class Arm extends Subsystem
 		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed,
 				0);
 		armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-		
-		//THESE ARE PERSISTANT, THEY MUST BE CHANGED, THEY WILL NOT RESET ON THEIR OWN
+
+		// THESE ARE PERSISTANT, THEY MUST BE CHANGED, THEY WILL NOT RESET ON THEIR OWN
 		armMotor.configPeakOutputForward(1, 0);
 		armMotor.configPeakOutputReverse(-1, 0);
-		
-		SmartDashboard.putNumber("P", kP);
-		SmartDashboard.putNumber("I", kI);
-		SmartDashboard.putNumber("D", kD);
-		SmartDashboard.putNumber("F", kF);
 
-		setPIDF(kP, kI, kD, kF);
-		
 		armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
 		armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
 
@@ -62,17 +60,22 @@ public class Arm extends Subsystem
 	{
 		armMotor.set(ControlMode.PercentOutput, value);
 	}
-
+	
+	public void setAdjusted(double value, double InitialTorque)
+	{
+		double adjustedSpeed = -InitialTorque * Math.cos(((getEncoderTicks() - 200) / 8192.0) * 2 * Math.PI) + value/3;
+		setRaw(adjustedSpeed);
+	}
 	public void setPosition(double rotations)
 	{
 		armMotor.set(ControlMode.Position, rotations);
 	}
-	
+
 	public void holdArm()
 	{
 		armMotor.set(ControlMode.Velocity, 0.001);
 	}
-	
+
 	public void setPIDF(double P, double I, double D, double F)
 	{
 		armMotor.config_kP(0, P, 0);
@@ -92,6 +95,7 @@ public class Arm extends Subsystem
 		return armMotor.getSensorCollection().getQuadraturePosition();
 	}
 
+	
 	public int getEncoderVelocity()
 	{
 		return armMotor.getSensorCollection().getQuadratureVelocity();
@@ -101,17 +105,12 @@ public class Arm extends Subsystem
 	{
 		return armMotor.getSensorCollection().isRevLimitSwitchClosed();
 	}
-	
+
 	public boolean getFwdLimitSwitch()
 	{
 		return armMotor.getSensorCollection().isFwdLimitSwitchClosed();
 	}
 
-	public void clearAccum()
-	{
-		armMotor.setIntegralAccumulator(0, 0, 0);
-	}
-	
 	public void resetEncoder()
 	{
 		if (!getFwdLimitSwitch())
@@ -119,11 +118,5 @@ public class Arm extends Subsystem
 			armMotor.getSensorCollection().setQuadraturePosition(0, 0);
 		}
 
-		kP = SmartDashboard.getNumber("P", kP);
-		kI = SmartDashboard.getNumber("I", kI);
-		kD = SmartDashboard.getNumber("D", kD);
-		kF = SmartDashboard.getNumber("F", kF);
-
-		setPIDF(kP, kI, kD, kF);		
 	}
 }

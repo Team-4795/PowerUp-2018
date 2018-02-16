@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4795.robot.commands;
 
 import org.usfirst.frc.team4795.robot.Robot;
+import org.usfirst.frc.team4795.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,8 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ManualArmControl extends Command
 {
 
-	private double armSpeed = 0.5;
-	
 	public ManualArmControl()
 	{
 		requires(Robot.arm);
@@ -23,14 +22,11 @@ public class ManualArmControl extends Command
 
 	protected void execute()
 	{
-		double speed = armSpeed * Robot.oi.getXLeftJoyY();
-		int position = Robot.arm.getEncoderTicks();
+		double torque = Robot.intake.hasBox() ? Robot.arm.BOX_INITIAL_TORQUE : Robot.arm.NO_BOX_INITIAL_TORQUE;
+		boolean isRequestingBattleMode = Robot.oi.XBOX_JOY.getRawButton(RobotMap.BATTLE_MODE.value);
 		
-		double adjustedSpeed = 0.45 * Math.cos((position / 16384.0) * 2 * Math.PI) + Robot.oi.getXLeftJoyY();
-		
-		SmartDashboard.putNumber("Adjusted Speed", adjustedSpeed);
-		Robot.arm.setRaw(speed);
-		
+		Robot.arm.setAdjusted(Robot.oi.getXLeftJoyY(), 
+				isRequestingBattleMode ? torque + Robot.arm.BATTLE_MODE_TORQUE_ADDITION : torque);
 	}
 
 	protected boolean isFinished()

@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ManualIntakeControl extends Command
 {
-	
+
 	public ManualIntakeControl()
 	{
 		requires(Robot.intake);
 	}
-	
+
 	protected void initialize()
 	{
 
@@ -23,11 +23,14 @@ public class ManualIntakeControl extends Command
 	{
 		boolean isRequestingIn = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_IN.value);
 		boolean isRequestingOut = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_OUT.value);
-		
-		if(isRequestingIn)
-			Robot.intake.variableIntake(0.5);
-		else if(isRequestingOut)
-			Robot.intake.variableIntake(-0.5);
+		boolean isRequestingFix = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_FIX.value);
+
+		if (isRequestingIn)
+			Robot.intake.variableIntake(0.5, 0.5);
+		else if (isRequestingOut)
+			Robot.intake.variableIntake(-0.5, -0.5);
+		else if(isRequestingFix)
+			Robot.intake.variableIntake(1, -0.5);
 		else
 			Robot.intake.holdBox();
 	}
