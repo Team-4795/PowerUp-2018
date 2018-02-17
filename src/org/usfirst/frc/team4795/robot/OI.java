@@ -7,56 +7,56 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI
 {
 	public static final double JOY_DEADZONE = 0.1;
-
-	public final Joystick LEFT_JOY = new Joystick(RobotMap.LEFT_JOY.value);
-	public final Joystick RIGHT_JOY = new Joystick(RobotMap.RIGHT_JOY.value);
-	public final Joystick XBOX_JOY = new Joystick(RobotMap.XBOX_CONTROLLER.value);
 	
-	public double getLeftJoyX()
+	public final Joystick MAIN_CONTROLLER = new Joystick(RobotMap.XBOX_CONTROLLER.value);
+	public final Joystick ARM_CONTROLLER = new Joystick(RobotMap.ARM_CONTROLLER.value);
+	
+	
+	public double getMainRightJoyY()
 	{
-		double raw = LEFT_JOY.getX();
-		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
-	}
-
-	public double getLeftJoyY()
-	{
-		double raw = LEFT_JOY.getY();
-		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
-	}
-
-	public double getRightJoyX()
-	{
-		double raw = RIGHT_JOY.getX();
-		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
-	}
-
-	public double getRightJoyY()
-	{
-		double raw = RIGHT_JOY.getY();
-		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
-	}
-
-	public double getXRightJoyY()
-	{
-		double raw = XBOX_JOY.getRawAxis(5);
+		double raw = MAIN_CONTROLLER.getRawAxis(5);
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	
-	public double getXRightJoyX()
+	public double getMainRightJoyX()
 	{
-		double raw = XBOX_JOY.getRawAxis(4);
+		double raw = MAIN_CONTROLLER.getRawAxis(4);
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	
-	public double getXLeftJoyY()
+	public double getMainLeftJoyY()
 	{
-		double raw = XBOX_JOY.getRawAxis(1);
+		double raw = MAIN_CONTROLLER.getRawAxis(1);
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	
-	public double getXLeftJoyX()
+	public double getMainLeftJoyX()
 	{
-		double raw = XBOX_JOY.getRawAxis(0);
+		double raw = MAIN_CONTROLLER.getRawAxis(0);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
+	public double getArmRightJoyY()
+	{
+		double raw = ARM_CONTROLLER.getRawAxis(5);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
+	public double getArmRightJoyX()
+	{
+		double raw = ARM_CONTROLLER.getRawAxis(4);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
+	public double getArmLeftJoyY()
+	{
+		double raw = ARM_CONTROLLER.getRawAxis(1);
+		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
+	}
+	
+	public double getArmLeftJoyX()
+	{
+		double raw = ARM_CONTROLLER.getRawAxis(0);
 		return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
 	}
 	

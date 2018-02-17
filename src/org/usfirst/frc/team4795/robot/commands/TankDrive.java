@@ -23,7 +23,7 @@ public class TankDrive extends Command
 
 	protected void execute()
 	{
-		if(Robot.oi.XBOX_JOY.getRawAxis(3) > 0.05)
+		if(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05)
 		{
 			fastMode = true;
 		}
@@ -34,8 +34,8 @@ public class TankDrive extends Command
 		
 		
 		double throttle = !fastMode ?  -1 : -0.5;
-		Robot.drivebase.set(ControlMode.PercentOutput, Robot.oi.getXLeftJoyY() * throttle,
-				Robot.oi.getXRightJoyY() * throttle);
+		Robot.drivebase.set(ControlMode.PercentOutput, Robot.oi.getMainLeftJoyY() * throttle,
+				Robot.oi.getMainRightJoyY() * throttle);
 	}
 
 	protected boolean isFinished()

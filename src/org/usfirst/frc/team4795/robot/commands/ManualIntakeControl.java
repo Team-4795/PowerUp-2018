@@ -21,9 +21,9 @@ public class ManualIntakeControl extends Command
 
 	protected void execute()
 	{
-		boolean isRequestingIn = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_IN.value);
-		boolean isRequestingOut = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_OUT.value);
-		boolean isRequestingFix = Robot.oi.XBOX_JOY.getRawButton(RobotMap.INTAKE_FIX.value);
+		boolean isRequestingIn = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_IN.value);
+		boolean isRequestingOut = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_OUT.value);
+		boolean isRequestingFix = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_FIX.value);
 
 		if (isRequestingIn)
 			Robot.intake.variableIntake(0.5, 0.5);

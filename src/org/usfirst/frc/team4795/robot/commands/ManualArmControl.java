@@ -23,9 +23,9 @@ public class ManualArmControl extends Command
 	protected void execute()
 	{
 		double torque = Robot.intake.hasBox() ? Robot.arm.BOX_INITIAL_TORQUE : Robot.arm.NO_BOX_INITIAL_TORQUE;
-		boolean isRequestingBattleMode = Robot.oi.XBOX_JOY.getRawButton(RobotMap.BATTLE_MODE.value);
+		boolean isRequestingBattleMode = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.BATTLE_MODE.value);
 		
-		Robot.arm.setAdjusted(Robot.oi.getXLeftJoyY(), 
+		Robot.arm.setAdjusted(Robot.oi.getArmLeftJoyY(), 
 				isRequestingBattleMode ? torque + Robot.arm.BATTLE_MODE_TORQUE_ADDITION : torque);
 	}
 
