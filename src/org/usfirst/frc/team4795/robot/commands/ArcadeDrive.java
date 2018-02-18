@@ -22,6 +22,7 @@ public class ArcadeDrive extends Command
 
 	protected void execute()
 	{
+		
 
 		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
 
@@ -45,15 +46,20 @@ public class ArcadeDrive extends Command
 		 */
 
 		if (outputLeft > 0)
-			Robot.drivebase.isDrivingForward = true;
+			//green
+			Robot.ledStripGreen.set(false);
 		else if (outputLeft < 0)
-			Robot.drivebase.isDrivingBackwords = true;
-		else
 		{
-			Robot.drivebase.isDrivingBackwords = false;
-			Robot.drivebase.isDrivingForward = false;
+			//yellow
+			Robot.ledStripGreen.set(false);
+			Robot.ledStripRed.set(false);
+		} else
+		{
+			Robot.ledStripGreen.set(true);
+			Robot.ledStripRed.set(true);
+			Robot.ledStripBlue.set(true);
 		}
-		
+
 		Robot.drivebase.set(ControlMode.PercentOutput, outputLeft * throttle, outputRight * throttle);
 
 	}

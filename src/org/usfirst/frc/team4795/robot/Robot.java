@@ -12,7 +12,6 @@ import org.usfirst.frc.team4795.robot.commands.TurnToAngle;
 import org.usfirst.frc.team4795.robot.subsystems.Arm;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
 import org.usfirst.frc.team4795.robot.subsystems.Intake;
-import org.usfirst.frc.team4795.robot.subsystems.LEDSystem;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -34,8 +33,11 @@ public class Robot extends TimedRobot
 	public static Drivebase drivebase;
 	public static Arm arm;
 	public static Intake intake;
-	public static LEDSystem ledSystem;
-	
+
+	public static DigitalOutput ledStripRed;
+	public static DigitalOutput ledStripBlue;
+	public static DigitalOutput ledStripGreen;
+
 	public static DigitalInput selecterBit0;
 	public static DigitalInput selecterBit1;
 	public static DigitalInput selecterBit2;
@@ -49,9 +51,11 @@ public class Robot extends TimedRobot
 		drivebase = new Drivebase();
 		arm = new Arm();
 		intake = new Intake();
-		ledSystem = new LEDSystem();
-		
 		oi = new OI();
+
+		ledStripRed = new DigitalOutput(RobotMap.LED_RED.value);
+		ledStripGreen = new DigitalOutput(RobotMap.LED_GREEN.value);
+		ledStripBlue = new DigitalOutput(RobotMap.LED_BLUE.value);
 
 		selecterBit0 = new DigitalInput(RobotMap.SELECTER_BIT_0.value);
 		selecterBit1 = new DigitalInput(RobotMap.SELECTER_BIT_1.value);

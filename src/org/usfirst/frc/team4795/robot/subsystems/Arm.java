@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
@@ -36,8 +35,6 @@ public class Arm extends Subsystem
 	public static final double BOX_INITIAL_TORQUE = 0.5;
 	
 	public static final double BATTLE_MODE_TORQUE_ADDITION = 0.2;
-	
-	
 	public Arm()
 	{
 		armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
@@ -56,6 +53,7 @@ public class Arm extends Subsystem
 
 		armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
 		armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
+
 	}
 
 	public void setRaw(double value)

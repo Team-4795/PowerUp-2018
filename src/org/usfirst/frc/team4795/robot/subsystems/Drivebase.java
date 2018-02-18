@@ -44,10 +44,6 @@ public class Drivebase extends Subsystem implements PIDOutput
 	public boolean hasDriven;
 	private double distanceInTicks;
 
-	//state Varibles for LEDs
-	public boolean isDrivingForward;
-	public boolean isDrivingBackwords;
-	
 	public Drivebase()
 	{
 		leftMotor1 = new TalonSRX(RobotMap.LEFT_MOTOR_1.value);
