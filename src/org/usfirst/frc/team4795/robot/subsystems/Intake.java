@@ -16,6 +16,9 @@ public class Intake extends Subsystem
 	private final DigitalInput limitSwitch1;
 	private final double holdSpeed = 0.1;
 
+	public boolean intaking;
+	public boolean outtaking;
+	
 	public Intake()
 	{
 		leftIntake = new Spark(RobotMap.INTAKE_LEFT.value);
