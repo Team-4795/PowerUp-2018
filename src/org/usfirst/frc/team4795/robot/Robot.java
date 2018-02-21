@@ -22,6 +22,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,13 +37,16 @@ public class Robot extends TimedRobot
 	public static Arm arm;
 	public static Intake intake;
 	public static LEDSystem ledSystem;
-	
+
 	public static DigitalInput selecterBit0;
 	public static DigitalInput selecterBit1;
 	public static DigitalInput selecterBit2;
 	Command CVJUSUS;
 
 	public static BitSet selecterNumber;
+
+	public static String gameData = "";
+	public static boolean hasData;
 
 	@Override
 	public void robotInit()
@@ -50,24 +55,25 @@ public class Robot extends TimedRobot
 		arm = new Arm();
 		intake = new Intake();
 		ledSystem = new LEDSystem();
-		
+
 		oi = new OI();
 
 		selecterBit0 = new DigitalInput(RobotMap.SELECTER_BIT_0.value);
 		selecterBit1 = new DigitalInput(RobotMap.SELECTER_BIT_1.value);
 		selecterBit2 = new DigitalInput(RobotMap.SELECTER_BIT_2.value);
 		selecterNumber = new BitSet(3);
-
-		CVJUSUS = new ArmToPos(true, true);
 	}
 
 	public void robotPeriodic()
 	{
 		SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
+		SmartDashboard.putNumber("Velocity", arm.getEncoderVelocity());
 		SmartDashboard.putNumber("Yaw", drivebase.getYaw());
 		SmartDashboard.putNumber("Right Encoder", drivebase.getrightEncoder());
 		SmartDashboard.putNumber("Left Encoder", drivebase.getleftEncoder());
 		SmartDashboard.putBoolean("Has Box?", intake.hasBox());
+		SmartDashboard.putNumber("Arm Voltage", arm.getVoltage());
+		SmartDashboard.putNumber("Arm Current", arm.getCurrent());
 
 		selecterNumber.set(0, selecterBit0.get());
 		selecterNumber.set(1, selecterBit1.get());
@@ -91,8 +97,7 @@ public class Robot extends TimedRobot
 	@Override
 	public void autonomousInit()
 	{
-		drivebase.hasDriven = false;
-		CVJUSUS.start();
+
 	}
 
 	@Override
@@ -100,6 +105,34 @@ public class Robot extends TimedRobot
 	{
 		arm.resetEncoder();
 		Scheduler.getInstance().run();
+
+		if (!hasData)
+		{
+			gameData = DriverStation.getInstance().getGameSpecificMessage();
+			if (gameData.length() > 0)
+			{
+				hasData = true;
+
+				switch ((int) convertBitSet(selecterNumber))
+				{
+				case 0:
+					CVJUSUS = null;
+					break;
+				case 1:
+					CVJUSUS = new CVJesus();
+					break;
+				case 2:
+					CVJUSUS = new LeftSideAuto();
+					break;
+				case 3:
+					CVJUSUS = new RightSideAuto();
+					break;
+				}
+				
+				drivebase.hasDriven = false;
+				CVJUSUS.start();
+			}
+		}
 	}
 
 	@Override

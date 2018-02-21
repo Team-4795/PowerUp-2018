@@ -25,7 +25,7 @@ public class ArcadeDrive extends Command
 
 		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
 
-		double JoyXValue = Robot.oi.getMainRightJoyX();
+		double JoyXValue = Robot.oi.getMainLeftJoyX();
 		double JoyYValue = Robot.oi.getMainRightJoyY();
 
 		double outputLeft = JoyYValue;

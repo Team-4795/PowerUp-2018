@@ -7,9 +7,14 @@ import edu.wpi.first.wpilibj.command.Command;
 public class LightLED extends Command
 {
 	
-	protected void initialize()
+	public LightLED()
 	{
 		requires(Robot.ledSystem);
+	}
+	
+	protected void initialize()
+	{
+		
 	}
 
 	protected void execute()
@@ -17,26 +22,32 @@ public class LightLED extends Command
 		if(Robot.intake.intaking)
 		{
 			Robot.ledSystem.ledStripRed.set(true);
-			Robot.ledSystem.ledStripBlue.set(true);
+			Robot.ledSystem.ledStripGreen.set(true);
+			Robot.ledSystem.ledStripBlue.set(false);
 		}
 		else if(Robot.intake.outtaking)
 		{
 			Robot.ledSystem.ledStripRed.set(true);
+			Robot.ledSystem.ledStripGreen.set(false);
+			Robot.ledSystem.ledStripBlue.set(true);
 		}
 		else if(Robot.drivebase.isDrivingForward)
 		{
-			Robot.ledSystem.ledStripGreen.set(true);
-		}
-		else if(Robot.drivebase.isDrivingBackwords)
-		{
+			Robot.ledSystem.ledStripRed.set(false);
 			Robot.ledSystem.ledStripGreen.set(true);
 			Robot.ledSystem.ledStripBlue.set(true);
 		}
-		else
+		else if(Robot.drivebase.isDrivingBackwords)
 		{
-			Robot.ledSystem.ledStripRed.set(false);
+			Robot.ledSystem.ledStripRed.set(true);
 			Robot.ledSystem.ledStripGreen.set(false);
 			Robot.ledSystem.ledStripBlue.set(false);
+		}
+		else
+		{
+			Robot.ledSystem.ledStripRed.set(true);
+			Robot.ledSystem.ledStripGreen.set(true);
+			Robot.ledSystem.ledStripBlue.set(true);
 		}
 	}
 	

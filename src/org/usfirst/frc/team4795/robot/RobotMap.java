@@ -16,7 +16,6 @@ public enum RobotMap
     LED_BLUE(8),
     LED_GREEN(9),
     INTAKE_LIMIT(0),
-    INTAKE_LIMIT_TILT(1),
     SELECTER_BIT_0(2),
     SELECTER_BIT_1(3),
     SELECTER_BIT_2(4),

@@ -103,8 +103,8 @@ public class Drivebase extends Subsystem implements PIDOutput
 			hasDriven = true;
 		} else
 		{
-			double leftSpeed = Math.pow((leftTarget - getleftEncoder()) / distanceInTicks, .5);
-			double rightSpeed = Math.pow((rightTarget - getrightEncoder()) / distanceInTicks, .5);
+			double leftSpeed = Math.pow((leftTarget - getleftEncoder()) / distanceInTicks, .5) * 0.8;
+			double rightSpeed = Math.pow((rightTarget - getrightEncoder()) / distanceInTicks, .5) * 0.8;
 			if (Math.abs(leftSpeed) < 0.50 || Math.abs(rightSpeed) < 0.50)
 			{
 				leftSpeed = 0;
@@ -112,7 +112,12 @@ public class Drivebase extends Subsystem implements PIDOutput
 				hasDriven = false;
 				isFinished = true;
 			}
-			set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
+			if(feet > 0)
+			{
+				set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
+			}
+			else
+				set(ControlMode.PercentOutput, -leftSpeed, -rightSpeed);
 		}
 		return isFinished;
 	}

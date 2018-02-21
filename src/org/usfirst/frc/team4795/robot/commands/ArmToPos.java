@@ -23,14 +23,15 @@ public class ArmToPos extends Command
 	protected void initialize()
 	{
 
-		double dir = isGoingForward ? 1 : -1;
-		Robot.arm.setAdjusted(0.7 * dir, hasBox ? Robot.arm.BOX_INITIAL_TORQUE : Robot.arm.NO_BOX_INITIAL_TORQUE);
+		double dir = isGoingForward ? -1 : 1;
+		double speed = Robot.intake.hasBox() ? 0.4 : 0.3;
+		Robot.arm.setRaw(speed * dir);
 	}
 
 	protected void execute()
 	{
-		if (Math.abs(Robot.arm.getEncoderVelocity()) > 200)
-			Robot.arm.setAdjusted(0, hasBox ? Robot.arm.BOX_INITIAL_TORQUE : Robot.arm.NO_BOX_INITIAL_TORQUE);
+		if (Math.abs(Robot.arm.getEncoderVelocity()) > 300)
+			Robot.arm.setRaw(0);
 		SmartDashboard.putNumber("Velocity", Robot.arm.getEncoderVelocity());
 
 	}

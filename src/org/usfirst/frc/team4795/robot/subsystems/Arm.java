@@ -32,8 +32,8 @@ public class Arm extends Subsystem
 	public static final int kToleranceTicks = 50;
 	public static final int ENCODER_TICKS_PER_REV = 2048;
 
-	public static final double NO_BOX_INITIAL_TORQUE = 0.3;
-	public static final double BOX_INITIAL_TORQUE = 0.5;
+	public static final double NO_BOX_INITIAL_TORQUE = 0.5;
+	public static final double BOX_INITIAL_TORQUE = 0.7;
 	
 	public static final double BATTLE_MODE_TORQUE_ADDITION = 0.2;
 	
@@ -44,9 +44,9 @@ public class Arm extends Subsystem
 		Robot.initTalon(armMotor);
 		armMotor.configOpenloopRamp(0.5, 0);
 		armMotor.configClosedloopRamp(0.3, 0);
-		armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed,
+		armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,
 				0);
-		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed,
+		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,
 				0);
 		armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
@@ -65,8 +65,9 @@ public class Arm extends Subsystem
 	
 	public void setAdjusted(double value, double InitialTorque)
 	{
-		double adjustedSpeed = -InitialTorque * Math.cos(((getEncoderTicks() - 200) / 8192.0) * 2 * Math.PI) + value/3;
+		double adjustedSpeed = -InitialTorque * Math.cos(((getEncoderTicks() - 150) / 8192.0) * 2 * Math.PI) + value/3;
 		setRaw(adjustedSpeed);
+		SmartDashboard.putNumber("Adjusted", adjustedSpeed);
 	}
 	public void setPosition(double rotations)
 	{
@@ -97,6 +98,15 @@ public class Arm extends Subsystem
 		return armMotor.getSensorCollection().getQuadraturePosition();
 	}
 
+	public double getCurrent()
+	{
+		return armMotor.getOutputCurrent();
+	}
+	
+	public double getVoltage()
+	{
+		return armMotor.getMotorOutputVoltage();
+	}
 	
 	public int getEncoderVelocity()
 	{
@@ -115,7 +125,7 @@ public class Arm extends Subsystem
 
 	public void resetEncoder()
 	{
-		if (!getFwdLimitSwitch())
+		if (getRevLimitSwitch())
 		{
 			armMotor.getSensorCollection().setQuadraturePosition(0, 0);
 		}

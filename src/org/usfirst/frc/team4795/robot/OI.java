@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI
 {
-	public static final double JOY_DEADZONE = 0.1;
+	public static final double JOY_DEADZONE = 0.15;
 	
 	public final Joystick MAIN_CONTROLLER = new Joystick(RobotMap.XBOX_CONTROLLER.value);
 	public final Joystick ARM_CONTROLLER = new Joystick(RobotMap.ARM_CONTROLLER.value);

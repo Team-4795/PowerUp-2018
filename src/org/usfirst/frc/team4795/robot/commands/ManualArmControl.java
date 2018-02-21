@@ -22,11 +22,18 @@ public class ManualArmControl extends Command
 
 	protected void execute()
 	{
+
+		double speed = Robot.intake.hasBox() ? 0.7 : 0.5;
+
 		double torque = Robot.intake.hasBox() ? Robot.arm.BOX_INITIAL_TORQUE : Robot.arm.NO_BOX_INITIAL_TORQUE;
 		boolean isRequestingBattleMode = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.BATTLE_MODE.value);
-		
-		Robot.arm.setAdjusted(Robot.oi.getArmLeftJoyY(), 
-				isRequestingBattleMode ? torque + Robot.arm.BATTLE_MODE_TORQUE_ADDITION : torque);
+
+		if (Math.abs(Robot.arm.getEncoderVelocity()) < 150)
+			Robot.arm.setRaw(Robot.oi.getArmLeftJoyY() * speed);
+		else
+		{
+			Robot.arm.setRaw(0);
+		}
 	}
 
 	protected boolean isFinished()
