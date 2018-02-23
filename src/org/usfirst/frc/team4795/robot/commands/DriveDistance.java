@@ -5,28 +5,27 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveDistance extends Command {
-	double Feet;
+  double Feet;
 
-	double P;
-	double I;
-	double D;
-	double F;
+  double P;
+  double I;
+  double D;
+  double F;
 
-	boolean isFinished = false;
+  boolean isFinished = false;
 
-	public DriveDistance(double feet) {
-		requires(Robot.drivebase);
-		Feet = feet;
-	}
+  public DriveDistance(double feet) {
+    requires(Robot.drivebase);
+    Feet = feet;
+  }
 
-	protected void initialize() {
-	}
+  protected void initialize() {}
 
-	protected void execute() {
-		isFinished = Robot.drivebase.driveFeet(Feet);
-	}
+  protected void execute() {
+    isFinished = Robot.drivebase.driveFeet(Feet);
+  }
 
-	protected boolean isFinished() {
-		return isFinished;
-	}
+  protected boolean isFinished() {
+    return isFinished;
+  }
 }

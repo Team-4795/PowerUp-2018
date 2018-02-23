@@ -1,58 +1,55 @@
 package org.usfirst.frc.team4795.robot.commands;
 
 import org.usfirst.frc.team4795.robot.Robot;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ArcadeDrive extends Command {
 
-	boolean fastMode = false;
+  boolean fastMode = false;
 
-	public ArcadeDrive() {
-		requires(Robot.drivebase);
-	}
+  public ArcadeDrive() {
+    requires(Robot.drivebase);
+  }
 
-	protected void initialize() {
-	}
+  protected void initialize() {}
 
-	protected void execute() {
+  protected void execute() {
 
-		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
+    double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
 
-		double JoyXValue = Robot.oi.getMainLeftJoyX();
-		double JoyYValue = Robot.oi.getMainRightJoyY();
+    double JoyXValue = Robot.oi.getMainLeftJoyX();
+    double JoyYValue = Robot.oi.getMainRightJoyY();
 
-		double outputLeft = JoyYValue;
-		double outputRight = JoyYValue;
+    double outputLeft = JoyYValue;
+    double outputRight = JoyYValue;
 
-		double difference = JoyXValue / 2;
+    double difference = JoyXValue / 2;
 
-		double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
+    double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
 
-		outputLeft += difference * correction;
-		outputRight -= difference * correction;
+    outputLeft += difference * correction;
+    outputRight -= difference * correction;
 
-		if (outputLeft > 0)
-			Robot.drivebase.isDrivingForward = true;
-		else if (outputLeft < 0)
-			Robot.drivebase.isDrivingBackwords = true;
-		else {
-			Robot.drivebase.isDrivingBackwords = false;
-			Robot.drivebase.isDrivingForward = false;
-		}
+    if (outputLeft > 0)
+      Robot.drivebase.isDrivingForward = true;
+    else if (outputLeft < 0)
+      Robot.drivebase.isDrivingBackwords = true;
+    else {
+      Robot.drivebase.isDrivingBackwords = false;
+      Robot.drivebase.isDrivingForward = false;
+    }
 
-		Robot.drivebase.set(ControlMode.PercentOutput, outputLeft * throttle, outputRight * throttle);
+    Robot.drivebase.set(ControlMode.PercentOutput, outputLeft * throttle, outputRight * throttle);
 
-	}
+  }
 
-	protected boolean isFinished() {
-		return false;
-	}
+  protected boolean isFinished() {
+    return false;
+  }
 
-	protected void interrupted() {
-		end();
-	}
+  protected void interrupted() {
+    end();
+  }
 
 }
