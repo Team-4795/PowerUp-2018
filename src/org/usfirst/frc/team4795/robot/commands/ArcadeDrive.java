@@ -6,22 +6,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ArcadeDrive extends Command
-{
+public class ArcadeDrive extends Command {
 
 	boolean fastMode = false;
 
-	public ArcadeDrive()
-	{
+	public ArcadeDrive() {
 		requires(Robot.drivebase);
 	}
 
-	protected void initialize()
-	{
+	protected void initialize() {
 	}
 
-	protected void execute()
-	{
+	protected void execute() {
 
 		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
 
@@ -38,33 +34,24 @@ public class ArcadeDrive extends Command
 		outputLeft += difference * correction;
 		outputRight -= difference * correction;
 
-		/*
-		 * outputLeft = Math.max(outputLeft, -1); outputRight = Math.max(outputRight,
-		 * -1); outputLeft = Math.min(1, outputRight); outputRight = Math.min(1,
-		 * outputRight);
-		 */
-
 		if (outputLeft > 0)
 			Robot.drivebase.isDrivingForward = true;
 		else if (outputLeft < 0)
 			Robot.drivebase.isDrivingBackwords = true;
-		else
-		{
+		else {
 			Robot.drivebase.isDrivingBackwords = false;
 			Robot.drivebase.isDrivingForward = false;
 		}
-		
+
 		Robot.drivebase.set(ControlMode.PercentOutput, outputLeft * throttle, outputRight * throttle);
 
 	}
 
-	protected boolean isFinished()
-	{
+	protected boolean isFinished() {
 		return false;
 	}
 
-	protected void interrupted()
-	{
+	protected void interrupted() {
 		end();
 	}
 

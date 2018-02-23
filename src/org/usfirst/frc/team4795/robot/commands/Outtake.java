@@ -3,36 +3,29 @@ package org.usfirst.frc.team4795.robot.commands;
 import org.usfirst.frc.team4795.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Outtake extends Command
-{
+public class Outtake extends Command {
 
-	public Outtake()
-	{
+	public Outtake() {
 		requires(Robot.intake);
 	}
 
-	protected void initialize()
-	{
+	protected void initialize() {
 
 	}
 
-	protected void execute()
-	{
+	protected void execute() {
 		Robot.intake.variableIntake(-0.5, -0.5);
 	}
 
-	protected boolean isFinished()
-	{
+	protected boolean isFinished() {
 		if (timeSinceInitialized() > 0.2)
 			return true;
-		
+
 		return false;
 	}
 
-	protected void interrupted()
-	{
+	protected void interrupted() {
 		end();
 	}
 
