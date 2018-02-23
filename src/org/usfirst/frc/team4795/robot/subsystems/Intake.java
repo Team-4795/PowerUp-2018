@@ -7,44 +7,44 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
-  private final Spark leftIntake;
-  private final Spark rightIntake;
+	private final Spark leftIntake;
+	private final Spark rightIntake;
 
-  private final DigitalInput limitSwitch;
-  private final double holdSpeed = 0.1;
+	private final DigitalInput limitSwitch;
+	private final double holdSpeed = 0.1;
 
-  public boolean intaking;
-  public boolean outtaking;
+	public boolean intaking;
+	public boolean outtaking;
 
-  public Intake() {
-    leftIntake = new Spark(RobotMap.INTAKE_LEFT.value);
-    rightIntake = new Spark(RobotMap.INTAKE_RIGHT.value);
-    limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT.value);
-  }
+	public Intake() {
+		leftIntake = new Spark(RobotMap.INTAKE_LEFT.value);
+		rightIntake = new Spark(RobotMap.INTAKE_RIGHT.value);
+		limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT.value);
+	}
 
-  // Intake with variable speed/direction
-  public void variableIntake(double speed, double speed2) {
-    leftIntake.set(speed);
-    rightIntake.set(-speed2);
-  }
+	// Intake with variable speed/direction
+	public void variableIntake(double speed, double speed2) {
+		leftIntake.set(speed);
+		rightIntake.set(-speed2);
+	}
 
-  public void holdBox() {
-    if (hasBox()) {
-      leftIntake.set(holdSpeed);
-      rightIntake.set(-holdSpeed);
-    } else {
-      leftIntake.set(0);
-      rightIntake.set(0);
-    }
-  }
+	public void holdBox() {
+		if (hasBox()) {
+			leftIntake.set(holdSpeed);
+			rightIntake.set(-holdSpeed);
+		} else {
+			leftIntake.set(0);
+			rightIntake.set(0);
+		}
+	}
 
-  public boolean hasBox() {
-    return !limitSwitch.get();
-  }
+	public boolean hasBox() {
+		return !limitSwitch.get();
+	}
 
-  @Override
-  protected void initDefaultCommand() {
-    setDefaultCommand(new ManualIntakeControl());
-  }
+	@Override
+	protected void initDefaultCommand() {
+		setDefaultCommand(new ManualIntakeControl());
+	}
 
 }
