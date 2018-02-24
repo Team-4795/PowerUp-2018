@@ -9,36 +9,29 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends Subsystem {
 
 	private final TalonSRX armMotor;
 
-	public static double kP = 0.0;
-	public static double kI = 0.00;
-	public static double kD = 0.00;
-	public static double kF = 0.00;
-	public static int IZone = 10;
-
-	public static final int kToleranceTicks = 50;
-	public static final int ENCODER_TICKS_PER_REV = 2048;
+	public final int kToleranceTicks = 50;
+	public final int ENCODER_TICKS_PER_REV = 2048;
 
 	public Arm() {
 		armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
 		Robot.initTalon(armMotor);
+
 		armMotor.configOpenloopRamp(0.5, 0);
 		armMotor.configClosedloopRamp(0.3, 0);
+		armMotor.configPeakOutputForward(1, 0);
+		armMotor.configPeakOutputReverse(-1, 0);
+
 		armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
 				LimitSwitchNormal.NormallyOpen, 0);
 		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
 				LimitSwitchNormal.NormallyOpen, 0);
+
 		armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-
-		// THESE ARE PERSISTANT, THEY MUST BE CHANGED, THEY WILL NOT RESET ON THEIR OWN
-		armMotor.configPeakOutputForward(1, 0);
-		armMotor.configPeakOutputReverse(-1, 0);
-
 		armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
 		armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
 	}
@@ -52,7 +45,6 @@ public class Arm extends Subsystem {
 				-InitialTorque * Math.cos(((getEncoderTicks() - 150) / 8192.0) * 2 * Math.PI)
 						+ value / 3;
 		setRaw(adjustedSpeed);
-		SmartDashboard.putNumber("Adjusted", adjustedSpeed);
 	}
 
 	public void setPosition(double rotations) {

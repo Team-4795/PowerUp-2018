@@ -3,18 +3,14 @@ package org.usfirst.frc.team4795.robot.subsystems;
 import org.usfirst.frc.team4795.robot.Robot;
 import org.usfirst.frc.team4795.robot.RobotMap;
 import org.usfirst.frc.team4795.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4795.robot.commands.TankDrive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
-import com.kauailabs.navx.frc.AHRS.SerialDataType;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivebase extends Subsystem implements PIDOutput {
 	private final TalonSRX leftMotor1;
@@ -25,25 +21,19 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
 	public final PIDController turnController;
 
-	private static final double kP = -0.03;
-	private static final double kI = 0.00;
-	private static final double kD = 0.00;
-	private static final double kF = 0.00;
+	private final double kP = -0.03;
+	private final double kI = 0.00;
+	private final double kD = 0.00;
+	private final double kF = 0.00;
 
 	private static final double kToleranceDegrees = 2.0f;
 
-	public static final double WHEEL_DIAMETER_IN = 4.0;
-	public static final int ENCODER_TICKS_PER_REV = 2048;
-	public static final double ENCODER_TICKS_PER_FT =
+	public final double WHEEL_DIAMETER_IN = 4.0;
+	public final int ENCODER_TICKS_PER_REV = 2048;
+	public final double ENCODER_TICKS_PER_FT =
 			(ENCODER_TICKS_PER_REV * 48) / (Math.PI * WHEEL_DIAMETER_IN);
 
-	private int leftTarget;
-	private int rightTarget;
-	private double distanceInTicks;
-
-	public boolean hasDriven;
-
-	// state Vars for LEDs
+	// state variables for LEDs
 	public boolean isDrivingForward;
 	public boolean isDrivingBackwords;
 
@@ -70,7 +60,6 @@ public class Drivebase extends Subsystem implements PIDOutput {
 		turnController.setOutputRange(-0.3, 0.3);
 		turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
-
 	}
 
 	public void set(ControlMode mode, double leftValue, double rightValue) {
@@ -84,32 +73,6 @@ public class Drivebase extends Subsystem implements PIDOutput {
 		turnController.setPID(kP, kI, kD, 0.0);
 		turnController.setSetpoint(angle);
 		turnController.enable();
-	}
-
-	public boolean driveFeet(double feet) {
-		boolean isFinished = false;
-		if (!hasDriven) {
-			distanceInTicks = feet * ENCODER_TICKS_PER_FT;
-			leftTarget = (int) (getLeftEncoder() + distanceInTicks);
-			rightTarget = (int) (getRightEncoder() + distanceInTicks);
-			hasDriven = true;
-		} else {
-			double leftSpeed =
-					Math.pow((leftTarget - getLeftEncoder()) / distanceInTicks, .5) * 0.8;
-			double rightSpeed =
-					Math.pow((rightTarget - getRightEncoder()) / distanceInTicks, .5) * 0.8;
-			if (Math.abs(leftSpeed) < 0.50 || Math.abs(rightSpeed) < 0.50) {
-				leftSpeed = 0;
-				rightSpeed = 0;
-				hasDriven = false;
-				isFinished = true;
-			}
-			if (feet > 0) {
-				set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
-			} else
-				set(ControlMode.PercentOutput, -leftSpeed, -rightSpeed);
-		}
-		return isFinished;
 	}
 
 	public int getLeftEncoder() {
