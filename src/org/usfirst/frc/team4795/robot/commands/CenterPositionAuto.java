@@ -16,6 +16,6 @@ public class CenterPositionAuto extends CommandGroup {
 		addSequential(new DriveFeet(-5, speed));
 		addSequential(new TurnToAngle(90 * gameDataMultiplier));
 		addSequential(new DriveFeet(-3.5, speed));
-		addSequential(new Outtake());
+		addSequential(new AutoIntakeControl(-0.5));
 	}
 }

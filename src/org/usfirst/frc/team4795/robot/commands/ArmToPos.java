@@ -16,13 +16,13 @@ public class ArmToPos extends Command {
 	}
 
 	protected void initialize() {
-
 		double dir = isGoingForward ? -1 : 1;
 		double speed = Robot.intake.hasBox() ? 0.4 : 0.3;
 		Robot.arm.setRaw(speed * dir);
 	}
 
 	protected void execute() {
+		// stop the arm if its going too fast, and let gravity/its momentum push it down
 		if (Math.abs(Robot.arm.getEncoderVelocity()) > 300)
 			Robot.arm.setRaw(0);
 		SmartDashboard.putNumber("Velocity", Robot.arm.getEncoderVelocity());
@@ -30,6 +30,8 @@ public class ArmToPos extends Command {
 	}
 
 	protected boolean isFinished() {
+		// if enough time has passed, and the arm has stopped moving due to hitting a hard stop,
+		// command has ended
 		if (timeSinceInitialized() > 0.5)
 			return Math.abs(Robot.arm.getEncoderVelocity()) < 4;
 		return false;

@@ -68,6 +68,8 @@ public class Drivebase extends Subsystem implements PIDOutput {
 	}
 
 	public void rotateDegrees(double angle) {
+		// reset the NavX so that the setpoint is relative to your current position and not the
+		// absolute position of the NavX
 		ahrs.reset();
 		turnController.reset();
 		turnController.setPID(kP, kI, kD, 0.0);

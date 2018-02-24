@@ -28,6 +28,7 @@ public class Intake extends Subsystem {
 		rightIntake.set(-speed2);
 	}
 
+	// if we have a box, continue to spin the wheels enough to grip and hold that box
 	public void holdBox() {
 		if (hasBox()) {
 			leftIntake.set(holdSpeed);

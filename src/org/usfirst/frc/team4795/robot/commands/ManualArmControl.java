@@ -17,6 +17,7 @@ public class ManualArmControl extends Command {
 
 		double speed = Robot.intake.hasBox() ? 0.7 : 0.5;
 
+		// if the speed of the arm is not too fast, then use analog control, otherwise stop the arm
 		if (Math.abs(Robot.arm.getEncoderVelocity()) < 150)
 			Robot.arm.setRaw(Robot.oi.getArmLeftJoyY() * speed);
 		else {

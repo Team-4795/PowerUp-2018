@@ -3,10 +3,12 @@ package org.usfirst.frc.team4795.robot.commands;
 import org.usfirst.frc.team4795.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Outtake extends Command {
+public class AutoIntakeControl extends Command {
+	double Speed;
 
-	public Outtake() {
+	public AutoIntakeControl(double speed) {
 		requires(Robot.intake);
+		Speed = speed;
 	}
 
 	protected void initialize() {
@@ -14,7 +16,7 @@ public class Outtake extends Command {
 	}
 
 	protected void execute() {
-		Robot.intake.variableIntake(-0.5, -0.5);
+		Robot.intake.variableIntake(Speed, Speed);
 	}
 
 	protected boolean isFinished() {
