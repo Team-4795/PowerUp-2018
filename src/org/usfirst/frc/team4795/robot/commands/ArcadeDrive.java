@@ -21,11 +21,18 @@ public class ArcadeDrive extends Command {
 		double JoyXValue = Robot.oi.getMainLeftJoyX();
 		double JoyYValue = Robot.oi.getMainRightJoyY();
 
+		// this code works by mapping the Y value of the joystick to the output of both motors, and
+		// then using the X value to calculate the difference in outputs necessary to make a turn
+		// that difference is then added to the left side, and subtracted from the right side,
+		// turning the robot
 		double outputLeft = JoyYValue;
 		double outputRight = JoyYValue;
 
 		double difference = JoyXValue / 2;
 
+		// this variable accounts for turning while moving forward, if you want to move in an arc
+		// and push left and forward, it will end up moving right and forward. This accounts for
+		// that error and ensures the robot follows the direction of the stick
 		double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
 
 		outputLeft += difference * correction;
