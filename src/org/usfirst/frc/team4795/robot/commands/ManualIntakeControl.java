@@ -2,59 +2,44 @@ package org.usfirst.frc.team4795.robot.commands;
 
 import org.usfirst.frc.team4795.robot.Robot;
 import org.usfirst.frc.team4795.robot.RobotMap;
-
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ManualIntakeControl extends Command
-{
+public class ManualIntakeControl extends Command {
 
-	public ManualIntakeControl()
-	{
+	public ManualIntakeControl() {
 		requires(Robot.intake);
 	}
 
-	protected void initialize()
-	{
+	protected void initialize() {
 
 	}
 
-	protected void execute()
-	{
+	protected void execute() {
 		boolean isRequestingIn = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_IN.value);
 		boolean isRequestingOut = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_OUT.value);
 		boolean isRequestingFix = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_FIX.value);
 
-		if (isRequestingIn)
-		{
+		if (isRequestingIn) {
 			Robot.intake.variableIntake(0.5, 0.5);
 			Robot.intake.intaking = true;
-		}
-		else if (isRequestingOut)
-		{
+		} else if (isRequestingOut) {
 			Robot.intake.variableIntake(-0.5, -0.5);
 			Robot.intake.outtaking = true;
-		}
-		else if (isRequestingFix)
-		{
+		} else if (isRequestingFix) {
 			Robot.intake.variableIntake(1, -0.5);
 			Robot.intake.outtaking = true;
-		}
-		else
-		{
+		} else {
 			Robot.intake.holdBox();
 			Robot.intake.outtaking = false;
 			Robot.intake.intaking = false;
 		}
 	}
 
-	protected boolean isFinished()
-	{
+	protected boolean isFinished() {
 		return false;
 	}
 
-	protected void interrupted()
-	{
+	protected void interrupted() {
 		end();
 	}
 

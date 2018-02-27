@@ -1,0 +1,51 @@
+package org.usfirst.frc.team4795.robot.commands;
+
+import org.usfirst.frc.team4795.robot.Robot;
+import com.ctre.phoenix.motorcontrol.*;
+import edu.wpi.first.wpilibj.command.Command;
+
+public class DriveFeet extends Command {
+	double Feet;
+	double Speed;
+
+	double distanceInTicks;
+	double leftTarget;
+	double rightTarget;
+
+	boolean isFinished = false;
+
+	public DriveFeet(double feet, double speed) {
+		requires(Robot.drivebase);
+		Feet = feet;
+		Speed = speed;
+	}
+
+	protected void initialize() {
+		distanceInTicks = Feet * Robot.drivebase.ENCODER_TICKS_PER_FT;
+		leftTarget = (int) (Robot.drivebase.getLeftEncoder() + distanceInTicks);
+		rightTarget = (int) (Robot.drivebase.getRightEncoder() + distanceInTicks);
+	}
+
+	protected void execute() {
+		double leftSpeed =
+				Math.pow((leftTarget - Robot.drivebase.getLeftEncoder()) / distanceInTicks, .5)
+						* Speed;
+		double rightSpeed =
+				Math.pow((rightTarget - Robot.drivebase.getRightEncoder()) / distanceInTicks, .5)
+						* Speed;
+		if (Math.abs(leftSpeed) < 0.50 || Math.abs(rightSpeed) < 0.50) {
+			leftSpeed = 0;
+			rightSpeed = 0;
+			isFinished = true;
+		}
+		if (Feet > 0) {
+			Robot.drivebase.set(ControlMode.PercentOutput, leftSpeed, rightSpeed);
+		} else
+			Robot.drivebase.set(ControlMode.PercentOutput, -leftSpeed, -rightSpeed);
+
+	}
+
+	protected boolean isFinished() {
+		return isFinished;
+	}
+}
