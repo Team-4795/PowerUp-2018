@@ -99,8 +99,6 @@ public class Robot extends TimedRobot {
 						selectedAutonomous = new RightSideAuto();
 						break;
 				}
-
-				drivebase.hasDriven = false;
 				selectedAutonomous.start();
 			}
 		}
