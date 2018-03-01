@@ -12,20 +12,25 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Intake extends Subsystem {
 	private final Spark leftIntake;
 	private final Spark rightIntake;
-	private final DoubleSolenoid shooter;
+	
+	private DoubleSolenoid shooter;
 	
 	private final DigitalInput limitSwitch;
 	private final double holdSpeed = 0.1;
 
 	public boolean intaking;
 	public boolean outtaking;
-
+	
+	public boolean hasPneumatics = false;
+	
 	public Intake() {
 		leftIntake = new Spark(RobotMap.INTAKE_LEFT.value);
 		rightIntake = new Spark(RobotMap.INTAKE_RIGHT.value);
 		limitSwitch = new DigitalInput(RobotMap.INTAKE_LIMIT.value);
-		shooter = new DoubleSolenoid(RobotMap.PCM.value, RobotMap.PCM_SHOOTER_FORWARD.value, RobotMap.PCM_SHOOTER_REVERSE.value);
-		shooter.set(Value.kOff);
+		if(hasPneumatics){
+			shooter = new DoubleSolenoid(RobotMap.PCM.value, RobotMap.PCM_SHOOTER_FORWARD.value, RobotMap.PCM_SHOOTER_REVERSE.value);
+			shooter.set(Value.kOff);
+		}
 	}
 
 	// Intake with variable speed/direction
@@ -36,7 +41,8 @@ public class Intake extends Subsystem {
 	
 	public void setShooter(Value value)
 	{
-		shooter.set(value);
+		if(hasPneumatics)
+			shooter.set(value);
 	}
 	
 	// if we have a box, continue to spin the wheels enough to grip and hold that box
