@@ -25,16 +25,12 @@ public class ArmToPos extends Command {
 		// stop the arm if its going too fast, and let gravity/its momentum push it down
 		if (Math.abs(Robot.arm.getEncoderVelocity()) > 300)
 			Robot.arm.setRaw(0);
-		SmartDashboard.putNumber("Velocity", Robot.arm.getEncoderVelocity());
-
 	}
 
 	protected boolean isFinished() {
 		// if enough time has passed, and the arm has stopped moving due to hitting a hard stop,
 		// command has ended
-		if (timeSinceInitialized() > 0.5)
-			return Math.abs(Robot.arm.getEncoderVelocity()) < 4;
-		return false;
+		return (Robot.arm.getRevLimitSwitch() || Robot.arm.getFwdLimitSwitch());
 	}
 
 	protected void interrupted() {

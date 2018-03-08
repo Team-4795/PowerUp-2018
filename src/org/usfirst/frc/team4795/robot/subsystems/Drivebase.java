@@ -21,7 +21,7 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
 	public final PIDController turnController;
 
-	private final double kP = -0.03;
+	private final double kP = -0.04;
 	private final double kI = 0.00;
 	private final double kD = 0.00;
 	private final double kF = 0.00;
@@ -57,7 +57,7 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
 		turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
 		turnController.setInputRange(-180.0f, 180.0f);
-		turnController.setOutputRange(-0.3, 0.3);
+		turnController.setOutputRange(-0.4, 0.4);
 		turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
 	}

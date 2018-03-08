@@ -16,7 +16,7 @@ public class ArcadeDrive extends Command {
 
 	protected void execute() {
 
-		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawAxis(3) > 0.05) ? -1 : -0.5;
+		double throttle = !(Robot.oi.MAIN_CONTROLLER.getRawButton(6)) ? -1 : -0.5;
 
 		double JoyXValue = Robot.oi.getMainLeftJoyX();
 		double JoyYValue = Robot.oi.getMainRightJoyY();
@@ -28,15 +28,15 @@ public class ArcadeDrive extends Command {
 		double outputLeft = JoyYValue;
 		double outputRight = JoyYValue;
 
-		double difference = JoyXValue / 2;
+		double difference = JoyXValue / -2;
 
 		// this variable accounts for turning while moving forward, if you want to move in an arc
 		// and push left and forward, it will end up moving right and forward. This accounts for
 		// that error and ensures the robot follows the direction of the stick
-		double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
+		//double correction = JoyYValue != 0 ? Math.abs(JoyYValue) / JoyYValue : -1;
 
-		outputLeft += difference * correction;
-		outputRight -= difference * correction;
+		outputLeft += difference;
+		outputRight -= difference;
 
 		if (outputLeft > 0)
 			Robot.drivebase.isDrivingForward = true;

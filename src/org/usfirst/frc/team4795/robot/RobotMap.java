@@ -23,8 +23,8 @@ public enum RobotMap {
 	SELECTER_BIT_1(3),
 	SELECTER_BIT_2(4),
 	// Joystick mappings
-	XBOX_CONTROLLER(1),
-	ARM_CONTROLLER(2),
+	XBOX_CONTROLLER(0),
+	ARM_CONTROLLER(1),
 	// Button Mappings
 	INTAKE_IN(5),
 	INTAKE_OUT(6),

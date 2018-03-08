@@ -33,7 +33,7 @@ public class DriveFeet extends Command {
 		double rightSpeed =
 				Math.pow((rightTarget - Robot.drivebase.getRightEncoder()) / distanceInTicks, .5)
 						* Speed;
-		if (Math.abs(leftSpeed) < 0.50 || Math.abs(rightSpeed) < 0.50) {
+		if (Math.abs(leftSpeed) < 0.3 || Math.abs(rightSpeed) < 0.3) {
 			leftSpeed = 0;
 			rightSpeed = 0;
 			isFinished = true;

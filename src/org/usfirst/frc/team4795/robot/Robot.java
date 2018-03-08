@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4795.robot;
 
 import org.usfirst.frc.team4795.robot.commands.CenterPositionAuto;
+import org.usfirst.frc.team4795.robot.commands.DoNothing;
 import org.usfirst.frc.team4795.robot.commands.LeftSideAuto;
 import org.usfirst.frc.team4795.robot.commands.RightSideAuto;
 import org.usfirst.frc.team4795.robot.subsystems.Arm;
@@ -12,6 +13,9 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.wpi.cscore.CameraServerJNI;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,8 +34,9 @@ public class Robot extends TimedRobot {
 
 	public static String gameData = "";
 	public static boolean hasData = false;
-
-	public static boolean DebugMode = true;
+	public static double delay = 0;
+	public static double timeDelay = 0;
+	public static boolean DebugMode = false;
 
 	@Override
 	public void robotInit() {
@@ -39,7 +44,7 @@ public class Robot extends TimedRobot {
 		arm = new Arm();
 		intake = new Intake();
 		ledSystem = new LEDSystem();
-
+		
 		oi = new OI();
 		AutonomousSelector = new Dial(RobotMap.SELECTER_BIT_0.value, RobotMap.SELECTER_BIT_1.value,
 				RobotMap.SELECTER_BIT_2.value);
@@ -84,10 +89,10 @@ public class Robot extends TimedRobot {
 			gameData = DriverStation.getInstance().getGameSpecificMessage();
 			if (gameData.length() > 0) {
 				hasData = true;
-
+				
 				switch ((int) AutonomousSelector.getDialPosition()) {
 					case 0:
-						selectedAutonomous = null;
+						selectedAutonomous = new DoNothing();
 						break;
 					case 1:
 						selectedAutonomous = new CenterPositionAuto();
@@ -97,6 +102,9 @@ public class Robot extends TimedRobot {
 						break;
 					case 3:
 						selectedAutonomous = new RightSideAuto();
+						break;
+					default:
+						selectedAutonomous = new DoNothing();
 						break;
 				}
 				selectedAutonomous.start();
