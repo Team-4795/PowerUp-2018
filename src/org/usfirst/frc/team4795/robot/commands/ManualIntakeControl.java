@@ -24,10 +24,10 @@ public class ManualIntakeControl extends Command {
 		boolean isRequestingRetract = Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_RETRACT.value);
 		
 		if (isRequestingIn) {
-			Robot.intake.variableIntake(1, 1); //out
+			Robot.intake.variableIntake(-0.7, -0.7);
 			Robot.intake.intaking = true;
 		} else if (isRequestingOut) {
-			Robot.intake.variableIntake(-0.7, -0.7);
+			Robot.intake.variableIntake(1, 1);
 			Robot.intake.outtaking = true;
 		} else if (isRequestingFix) {
 			Robot.intake.variableIntake(1, -0.5);
@@ -38,18 +38,6 @@ public class ManualIntakeControl extends Command {
 			Robot.intake.intaking = false;
 		}
 		
-		if(isRequestingShoot)
-		{
-			Robot.intake.setShooter(Value.kForward);
-		}
-		else if(isRequestingRetract)
-		{
-			Robot.intake.setShooter(Value.kReverse);
-		}
-		else
-		{
-			Robot.intake.setShooter(Value.kOff);
-		}
 	}
 
 	protected boolean isFinished() {
