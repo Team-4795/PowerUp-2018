@@ -12,84 +12,84 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Arm extends Subsystem {
 
-	private final TalonSRX armMotor;
+    private final TalonSRX armMotor;
 
-	public final int kToleranceTicks = 50;
-	public final int ENCODER_TICKS_PER_REV = 2048;
+    public final int kToleranceTicks = 50;
+    public final int ENCODER_TICKS_PER_REV = 2048;
 
-	public Arm() {
-		armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
-		Robot.initTalon(armMotor);
+    public Arm() {
+        armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
+        Robot.initTalon(armMotor);
 
-		armMotor.configOpenloopRamp(0.5, 0);
-		armMotor.configClosedloopRamp(0.3, 0);
-		armMotor.configPeakOutputForward(1, 0);
-		armMotor.configPeakOutputReverse(-1, 0);
+        armMotor.configOpenloopRamp(0.5, 0);
+        armMotor.configClosedloopRamp(0.3, 0);
+        armMotor.configPeakOutputForward(1, 0);
+        armMotor.configPeakOutputReverse(-1, 0);
 
-		armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-				LimitSwitchNormal.NormallyOpen, 0);
-		armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-				LimitSwitchNormal.NormallyOpen, 0);
+        armMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyOpen, 0);
+        armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyOpen, 0);
 
-		armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-		armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
-		armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
-	}
+        armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+        armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
+        armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
+    }
 
-	public void setRaw(double value) {
-		armMotor.set(ControlMode.PercentOutput, value);
-	}
+    public void setRaw(double value) {
+        armMotor.set(ControlMode.PercentOutput, value);
+    }
 
-	public void setAdjusted(double value, double InitialTorque) {
-		double adjustedSpeed =
-				-InitialTorque * Math.cos(((getEncoderTicks() - 150) / 8192.0) * 2 * Math.PI)
-						+ value / 3;
-		setRaw(adjustedSpeed);
-	}
+    public void setAdjusted(double value, double InitialTorque) {
+        double adjustedSpeed =
+                -InitialTorque * Math.cos(((getEncoderTicks() - 150) / 8192.0) * 2 * Math.PI)
+                        + value / 3;
+        setRaw(adjustedSpeed);
+    }
 
-	public void setPosition(double rotations) {
-		armMotor.set(ControlMode.Position, rotations);
-	}
+    public void setPosition(double rotations) {
+        armMotor.set(ControlMode.Position, rotations);
+    }
 
-	public void resetEncoder() {
-		if (getRevLimitSwitch()) {
-			armMotor.getSensorCollection().setQuadraturePosition(0, 0);
-		}
-	}
+    public void resetEncoder() {
+        if (getRevLimitSwitch()) {
+            armMotor.getSensorCollection().setQuadraturePosition(0, 0);
+        }
+    }
 
-	public void setPIDF(double P, double I, double D, double F) {
-		armMotor.config_kP(0, P, 0);
-		armMotor.config_kI(0, I, 0);
-		armMotor.config_kD(0, D, 0);
-		armMotor.config_kF(0, F, 0);
-	}
+    public void setPIDF(double P, double I, double D, double F) {
+        armMotor.config_kP(0, P, 0);
+        armMotor.config_kI(0, I, 0);
+        armMotor.config_kD(0, D, 0);
+        armMotor.config_kF(0, F, 0);
+    }
 
-	public int getEncoderTicks() {
-		return armMotor.getSensorCollection().getQuadraturePosition();
-	}
+    public int getEncoderTicks() {
+        return armMotor.getSensorCollection().getQuadraturePosition();
+    }
 
-	public double getCurrent() {
-		return armMotor.getOutputCurrent();
-	}
+    public double getCurrent() {
+        return armMotor.getOutputCurrent();
+    }
 
-	public double getVoltage() {
-		return armMotor.getMotorOutputVoltage();
-	}
+    public double getVoltage() {
+        return armMotor.getMotorOutputVoltage();
+    }
 
-	public int getEncoderVelocity() {
-		return armMotor.getSensorCollection().getQuadratureVelocity();
-	}
+    public int getEncoderVelocity() {
+        return armMotor.getSensorCollection().getQuadratureVelocity();
+    }
 
-	public boolean getRevLimitSwitch() {
-		return armMotor.getSensorCollection().isRevLimitSwitchClosed();
-	}
+    public boolean getRevLimitSwitch() {
+        return armMotor.getSensorCollection().isRevLimitSwitchClosed();
+    }
 
-	public boolean getFwdLimitSwitch() {
-		return armMotor.getSensorCollection().isFwdLimitSwitchClosed();
-	}
+    public boolean getFwdLimitSwitch() {
+        return armMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
 
-	@Override
-	protected void initDefaultCommand() {
-		setDefaultCommand(new ManualArmControl());
-	}
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new ManualArmControl());
+    }
 }
