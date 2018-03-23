@@ -8,6 +8,8 @@ public class LeftSideAuto extends CommandGroup {
     public LeftSideAuto() {
         double gameDataMultiplier = Robot.gameData.charAt(0) == 'L' ? 1 : -1;
         double speed = 0.8;
+
+        addSequential(new Delay(Robot.delay));
         addSequential(new ArmToPos(false, true));
         addSequential(new DriveFeet(-3.5, speed));
         addSequential(new TurnToAngle(90));

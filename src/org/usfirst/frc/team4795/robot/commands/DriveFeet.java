@@ -19,7 +19,14 @@ public class DriveFeet extends Command {
         Feet = feet;
         Speed = speed;
     }
-
+    
+    public DriveFeet(double feet, double speed, double timeout) {
+        requires(Robot.drivebase);
+        Feet = feet;
+        Speed = speed;
+        setTimeout(timeout);
+    }
+    
     protected void initialize() {
         distanceInTicks = Feet * Robot.drivebase.ENCODER_TICKS_PER_FT;
         leftTarget = (int) (Robot.drivebase.getLeftEncoder() + distanceInTicks);
@@ -46,6 +53,6 @@ public class DriveFeet extends Command {
     }
 
     protected boolean isFinished() {
-        return isFinished;
+        return isFinished || isTimedOut();
     }
 }

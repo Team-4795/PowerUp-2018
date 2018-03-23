@@ -31,9 +31,11 @@ public class Arm extends Subsystem {
         armMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyOpen, 0);
 
+        // Closed loop settings
         armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
         armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
         armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
+
     }
 
     public void setRaw(double value) {
@@ -42,7 +44,7 @@ public class Arm extends Subsystem {
 
     public void setAdjusted(double value, double InitialTorque) {
         double adjustedSpeed =
-                -InitialTorque * Math.cos(((getEncoderTicks() - 150) / 8192.0) * 2 * Math.PI)
+                InitialTorque * Math.cos(((getEncoderTicks() - 90.0) / 8192.0) * 2 * Math.PI)
                         + value / 3;
         setRaw(adjustedSpeed);
     }
@@ -55,6 +57,9 @@ public class Arm extends Subsystem {
         if (getRevLimitSwitch()) {
             armMotor.getSensorCollection().setQuadraturePosition(0, 0);
         }
+        if (getFwdLimitSwitch()) {
+            armMotor.getSensorCollection().setQuadraturePosition(3086, 0); //I LOVE BITCONNECT
+        }
     }
 
     public void setPIDF(double P, double I, double D, double F) {
@@ -65,7 +70,7 @@ public class Arm extends Subsystem {
     }
 
     public int getEncoderTicks() {
-        return armMotor.getSensorCollection().getQuadraturePosition();
+        return -armMotor.getSensorCollection().getQuadraturePosition();
     }
 
     public double getCurrent() {

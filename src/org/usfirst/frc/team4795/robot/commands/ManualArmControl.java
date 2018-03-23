@@ -15,14 +15,21 @@ public class ManualArmControl extends Command {
 
     protected void execute() {
 
-        double speed = Robot.intake.hasBox() ? 0.7 : 0.5;
+        double speed = Robot.intake.hasBox() ? 0.27 : 0.23;
 
         // if the speed of the arm is not too fast, then use analog control, otherwise stop the arm
-        if (Math.abs(Robot.arm.getEncoderVelocity()) < 150)
-            Robot.arm.setRaw(Robot.oi.getArmLeftJoyY() * speed);
-        else {
+
+        if((!Robot.arm.getRevLimitSwitch() && !Robot.arm.getFwdLimitSwitch()) || Robot.oi.getArmLeftJoyY() != 0)
+            Robot.arm.setAdjusted(Robot.oi.getArmLeftJoyY(), speed);
+        else
             Robot.arm.setRaw(0);
-        }
+        // if (Math.abs(Robot.arm.getEncoderVelocity()) < 150)
+        // Robot.arm.setRaw(Robot.oi.getArmLeftJoyY() * speed);
+        // else {
+        // Robot.arm.setRaw(0);
+        // }
+
+
     }
 
     protected boolean isFinished() {

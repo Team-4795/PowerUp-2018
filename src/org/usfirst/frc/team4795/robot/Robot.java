@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4795.robot;
 
 import org.usfirst.frc.team4795.robot.commands.CenterPositionAuto;
+import org.usfirst.frc.team4795.robot.commands.CrossAutoLine;
 import org.usfirst.frc.team4795.robot.commands.DoNothing;
 import org.usfirst.frc.team4795.robot.commands.LeftSideAuto;
 import org.usfirst.frc.team4795.robot.commands.RightSideAuto;
@@ -17,6 +18,7 @@ import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,8 +36,7 @@ public class Robot extends TimedRobot {
     public static String gameData = "";
     public static boolean hasData = false;
     public static double delay = 0;
-    public static double timeDelay = 0;
-    public static boolean DebugMode = false;
+    public static boolean DebugMode = true;
 
     @Override
     public void robotInit() {
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
         oi = new OI();
         AutonomousSelector = new Dial(RobotMap.SELECTER_BIT_0.value, RobotMap.SELECTER_BIT_1.value,
                 RobotMap.SELECTER_BIT_2.value);
+        SmartDashboard.putNumber("Delay (seconds)", delay);
     }
 
     public void robotPeriodic() {
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("Has Box?", intake.hasBox());
 
+        delay = SmartDashboard.getNumber("Delay (seconds)", delay);
         SmartDashboard.putNumber("Selecter", AutonomousSelector.getDialPosition());
     }
 
@@ -79,7 +82,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-
     }
 
     @Override
@@ -101,6 +103,9 @@ public class Robot extends TimedRobot {
                         break;
                     case 3:
                         selectedAutonomous = new RightSideAuto();
+                        break;
+                    case 4:
+                        selectedAutonomous = new CrossAutoLine();
                         break;
                     default:
                         selectedAutonomous = new DoNothing();

@@ -11,7 +11,7 @@ public class OI {
     public final Joystick ARM_CONTROLLER = new Joystick(RobotMap.ARM_CONTROLLER.value);
 
     public double getMainRightJoyY() {
-        double raw = MAIN_CONTROLLER.getRawAxis(5);
+        double raw = MAIN_CONTROLLER.getRawAxis(5); //2
         return Math.abs(raw) < JOY_DEADZONE ? 0.0 : raw;
     }
 
