@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
@@ -28,6 +29,7 @@ public class Intake extends Subsystem {
         shooter.set(Value.kOff);
     }
 
+
     // Intake with variable speed/direction
     public void variableIntake(double speed, double speed2) {
         leftIntake.set(speed);
@@ -37,6 +39,7 @@ public class Intake extends Subsystem {
     public void setShooter(Value value) {
         shooter.set(value);
     }
+
 
     // if we have a box, continue to spin the wheels enough to grip and hold that box
     public void holdBox() {

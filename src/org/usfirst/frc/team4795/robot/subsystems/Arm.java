@@ -9,13 +9,15 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Arm extends Subsystem {
 
     private final TalonSRX armMotor;
-
+    private final Servo bagTag;
+    
     public final int kToleranceTicks = 50;
     public final int ENCODER_TICKS_PER_REV = 2048;
 
@@ -38,6 +40,7 @@ public class Arm extends Subsystem {
         armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
         armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
 
+        bagTag = new Servo(RobotMap.BAG_TAG.value);
     }
 
     public void setRaw(double value) {
@@ -55,6 +58,10 @@ public class Arm extends Subsystem {
         armMotor.set(ControlMode.Position, rotations);
     }
 
+    public void setBagTag(double value) {
+        bagTag.set(value);
+    }
+    
     public void resetEncoder() {
         if (getRevLimitSwitch()) {
             armMotor.getSensorCollection().setQuadraturePosition(0, 0);

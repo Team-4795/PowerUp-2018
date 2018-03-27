@@ -2,23 +2,32 @@ package org.usfirst.frc.team4795.robot.commands;
 
 import org.usfirst.frc.team4795.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmToPos extends Command {
 
     boolean isGoingForward;
     boolean hasBox;
-
+    boolean extendTag = false;
+    
     public ArmToPos(boolean isForward, boolean hasBox) {
         requires(Robot.arm);
         isGoingForward = isForward;
         this.hasBox = hasBox;
     }
 
+    public ArmToPos(boolean isForward, boolean hasBox, boolean extendBagTag) {
+        requires(Robot.arm);
+        isGoingForward = isForward;
+        this.hasBox = hasBox;
+        extendTag = extendBagTag;
+    }
+    
     protected void initialize() {
         double dir = isGoingForward ? -1 : 1;
         double speed = Robot.intake.hasBox() ? 0.4 : 0.3;
         Robot.arm.setRaw(speed * dir);
+        if(extendTag)
+            Robot.arm.setBagTag(0.5);
     }
 
     protected void execute() {
