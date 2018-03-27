@@ -2,6 +2,7 @@ package org.usfirst.frc.team4795.robot.commands;
 
 import org.usfirst.frc.team4795.robot.Robot;
 import org.usfirst.frc.team4795.robot.RobotMap;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ManualIntakeControl extends Command {
@@ -29,9 +30,11 @@ public class ManualIntakeControl extends Command {
             Robot.intake.outtaking = true;
         } else if (isRequestingFix) {
             Robot.intake.variableIntake(1, -0.5);
+            Robot.intake.setShooter(Value.kForward);
             Robot.intake.outtaking = true;
         } else if (isRequestingShoot) {
             Robot.intake.variableIntake(1, 1);
+            Robot.intake.setShooter(Value.kReverse);
             Robot.intake.outtaking = true;
         } else {
             Robot.intake.holdBox();

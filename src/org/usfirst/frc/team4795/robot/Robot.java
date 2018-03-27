@@ -56,12 +56,15 @@ public class Robot extends TimedRobot {
 
         if (DebugMode) {
             SmartDashboard.putNumber("Arm Encoder", arm.getEncoderTicks());
+            SmartDashboard.putNumber("Absolute Position", arm.getEncoderAbsolute());
             SmartDashboard.putNumber("Velocity", arm.getEncoderVelocity());
             SmartDashboard.putNumber("Yaw", drivebase.getYaw());
             SmartDashboard.putNumber("Right Encoder", drivebase.getRightEncoder());
             SmartDashboard.putNumber("Left Encoder", drivebase.getLeftEncoder());
             SmartDashboard.putNumber("Arm Voltage", arm.getVoltage());
             SmartDashboard.putNumber("Arm Current", arm.getCurrent());
+            SmartDashboard.putBoolean("Forward Limit", arm.getFwdLimitSwitch());
+            SmartDashboard.putBoolean("Reverse Limit", arm.getRevLimitSwitch());
         }
 
         SmartDashboard.putBoolean("Has Box?", intake.hasBox());

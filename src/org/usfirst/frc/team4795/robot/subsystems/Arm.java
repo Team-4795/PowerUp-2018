@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Arm extends Subsystem {
@@ -32,7 +34,7 @@ public class Arm extends Subsystem {
                 LimitSwitchNormal.NormallyOpen, 0);
 
         // Closed loop settings
-        armMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+        armMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
         armMotor.configAllowableClosedloopError(0, kToleranceTicks, 0);
         armMotor.setSelectedSensorPosition(getEncoderTicks(), 0, 0);
 
@@ -44,7 +46,7 @@ public class Arm extends Subsystem {
 
     public void setAdjusted(double value, double InitialTorque) {
         double adjustedSpeed =
-                InitialTorque * Math.cos(((getEncoderTicks() - 90.0) / 8192.0) * 2 * Math.PI)
+                -1*InitialTorque * Math.cos(((getEncoderAbsolute()-750.0) / 4096.0) * 2 * Math.PI)
                         + value / 3;
         setRaw(adjustedSpeed);
     }
@@ -58,7 +60,7 @@ public class Arm extends Subsystem {
             armMotor.getSensorCollection().setQuadraturePosition(0, 0);
         }
         if (getFwdLimitSwitch()) {
-            armMotor.getSensorCollection().setQuadraturePosition(3086, 0); //I LOVE BITCONNECT
+            armMotor.getSensorCollection().setQuadraturePosition(3086, 0); // I LOVE BITCONNECT
         }
     }
 
@@ -69,8 +71,24 @@ public class Arm extends Subsystem {
         armMotor.config_kF(0, F, 0);
     }
 
+    public void initQuadrature() {
+        /* get the absolute pulse width position */
+        int pulseWidth = armMotor.getSensorCollection().getPulseWidthPosition();
+
+
+        pulseWidth = pulseWidth & 0xFFF;
+
+        /* save it to quadrature */
+        armMotor.getSensorCollection().setQuadraturePosition(pulseWidth, 0);
+
+    }
+
     public int getEncoderTicks() {
         return -armMotor.getSensorCollection().getQuadraturePosition();
+    }
+
+    public int getEncoderAbsolute() {
+        return armMotor.getSensorCollection().getPulseWidthPosition() & 0xFFF;
     }
 
     public double getCurrent() {
