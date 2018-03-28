@@ -8,17 +8,20 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Arm extends Subsystem {
 
     private final TalonSRX armMotor;
+    private final Servo bagTag;
 
     public final int kToleranceTicks = 50;
     public final int ENCODER_TICKS_PER_REV = 2048;
 
     public Arm() {
         armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
+        bagTag = new Servo(RobotMap.BAG_TAG.value);
         Robot.initTalon(armMotor);
 
         armMotor.configOpenloopRamp(0.5, 0);
@@ -53,12 +56,16 @@ public class Arm extends Subsystem {
         armMotor.set(ControlMode.Position, rotations);
     }
 
+    public void setBagTag(double value) {
+        bagTag.set(value);
+    }
+
     public void resetEncoder() {
         if (getRevLimitSwitch()) {
             armMotor.getSensorCollection().setQuadraturePosition(0, 0);
         }
         if (getFwdLimitSwitch()) {
-            armMotor.getSensorCollection().setQuadraturePosition(3086, 0); //I LOVE BITCONNECT
+            armMotor.getSensorCollection().setQuadraturePosition(3086, 0); // I LOVE BITCONNECT
         }
     }
 

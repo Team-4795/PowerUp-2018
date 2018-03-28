@@ -12,6 +12,7 @@ public class CenterPositionAuto extends CommandGroup {
 
         addSequential(new Delay(Robot.delay));
         addSequential(new ArmToPos(false, true));
+        addSequential(new ExtendBagTag());
         addSequential(new DriveFeet(-3.5, speed));
         addSequential(new TurnToAngle(-90 * gameDataMultiplier));
         addSequential(new DriveFeet(-4.5, speed));

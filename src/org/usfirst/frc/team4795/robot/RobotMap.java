@@ -6,7 +6,7 @@ public enum RobotMap {
     // PCM Mappings
     PCM_SHOOTER_FORWARD(6), PCM_SHOOTER_REVERSE(4),
     // PWM Mappings
-    INTAKE_LEFT(0), INTAKE_RIGHT(1),
+    INTAKE_LEFT(0), INTAKE_RIGHT(1), BAG_TAG(2),
     // DIO Mappings
     LED_RED(7), LED_BLUE(8), LED_GREEN(9), INTAKE_LIMIT(0), SELECTER_BIT_0(2), SELECTER_BIT_1(
             3), SELECTER_BIT_2(4),
