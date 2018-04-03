@@ -9,6 +9,7 @@ public class AutoIntakeControl extends Command {
     public AutoIntakeControl(double speed) {
         requires(Robot.intake);
         Speed = speed;
+        setTimeout(0.5);
     }
 
     protected void initialize() {
@@ -20,10 +21,7 @@ public class AutoIntakeControl extends Command {
     }
 
     protected boolean isFinished() {
-        if (timeSinceInitialized() > 0.2)
-            return true;
-
-        return false;
+        return isTimedOut();
     }
 
     protected void interrupted() {

@@ -27,7 +27,7 @@ public class TurnToAngle extends Command {
 
         if (inErrorZone) {
             count++;
-            if (count >= 10) {
+            if (count >= 5) {
                 isFinished = true;
             } else {
                 isFinished = false;

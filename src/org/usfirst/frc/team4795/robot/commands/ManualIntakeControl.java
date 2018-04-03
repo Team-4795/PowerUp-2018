@@ -22,16 +22,16 @@ public class ManualIntakeControl extends Command {
                 Robot.oi.ARM_CONTROLLER.getRawButton(RobotMap.INTAKE_SHOOT.value);
 
         if (isRequestingIn) {
-            Robot.intake.variableIntake(-0.5, -0.4);
+            Robot.intake.variableIntake(0.5, 0.5);
             Robot.intake.intaking = true;
         } else if (isRequestingOut) {
-            Robot.intake.variableIntake(0.5, 0.5);
+            Robot.intake.variableIntake(-0.5, -0.5);
             Robot.intake.outtaking = true;
         } else if (isRequestingFix) {
             Robot.intake.variableIntake(1, -0.5);
             Robot.intake.outtaking = true;
         } else if (isRequestingShoot) {
-            Robot.intake.variableIntake(1, 1);
+            Robot.intake.variableIntake(-1, -1);
             Robot.intake.outtaking = true;
         } else {
             Robot.intake.holdBox();

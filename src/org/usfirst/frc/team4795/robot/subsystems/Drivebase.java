@@ -35,7 +35,7 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
     // state variables for LEDs
     public boolean isDrivingForward;
-    public boolean isDrivingBackwords;
+    public boolean isDrivingBackwards;
 
     public Drivebase() {
         leftMotor1 = new TalonSRX(RobotMap.LEFT_MOTOR_1.value);
@@ -57,7 +57,7 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
         turnController = new PIDController(kP, kI, kD, kF, ahrs, this);
         turnController.setInputRange(-180.0f, 180.0f);
-        turnController.setOutputRange(-0.4, 0.4);
+        turnController.setOutputRange(-0.45, 0.45);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
         turnController.setContinuous(true);
     }

@@ -24,8 +24,8 @@ public class Intake extends Subsystem {
 
     // Intake with variable speed/direction
     public void variableIntake(double speed, double speed2) {
-        leftIntake.set(speed);
-        rightIntake.set(-speed2);
+        leftIntake.set(-speed);
+        rightIntake.set(speed2);
     }
 
     // if we have a box, continue to spin the wheels enough to grip and hold that box

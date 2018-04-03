@@ -18,16 +18,18 @@ public class CenterPositionAuto extends CommandGroup {
         addSequential(new DriveFeet(-4.5, speed));
         addSequential(new TurnToAngle(90 * gameDataMultiplier));
         addSequential(new DriveFeet(-5.5, speed, 3.5));
-        addSequential(new AutoIntakeControl(0.5));
-        
+        addSequential(new AutoIntakeControl(-0.5));
+
         // two box
-        // addSequential(new ArmToPos(true, false));
-        // addSequential(new TurnToAngle(-90 * gameDataMultiplier));
-        // addParallel(new AutoIntakeControl(0.5));
-        // addSequential(new DriveFeet(-1, speed));
-        // addSequential(new DriveFeet(1, speed));
-        // addSequential(new TurnToAngle(90 * gameDataMultiplier));
-        // addSequential(new ArmToPos(false, true));
-        // addSequential(new AutoIntakeControl(-0.5));
+        addSequential(new ArmToPos(true, false));
+        addSequential(new DriveFeet(0.1, speed, 0.5));
+        addSequential(new TurnToAngle(-90 * gameDataMultiplier));
+        addSequential(new AutoIntakeControl(0.5));
+        addSequential(new DriveUntilBox(8, speed / 2));
+        addSequential(new DriveFeet(-3, speed));
+        addSequential(new TurnToAngle(90 * gameDataMultiplier));
+        addSequential(new ArmToPos(false, true));
+        addSequential(new DriveFeet(-0.1, speed, 0.5));
+        addSequential(new AutoIntakeControl(-0.5));
     }
 }
