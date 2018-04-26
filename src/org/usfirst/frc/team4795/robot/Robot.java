@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4795.robot;
 
+import org.usfirst.frc.team4795.robot.commands.ArmToPos;
 import org.usfirst.frc.team4795.robot.commands.CenterPositionAuto;
 import org.usfirst.frc.team4795.robot.commands.CrossAutoLine;
 import org.usfirst.frc.team4795.robot.commands.DoNothing;
@@ -9,6 +10,7 @@ import org.usfirst.frc.team4795.robot.subsystems.Arm;
 import org.usfirst.frc.team4795.robot.subsystems.Drivebase;
 import org.usfirst.frc.team4795.robot.subsystems.Intake;
 import org.usfirst.frc.team4795.robot.subsystems.LEDSystem;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -81,8 +83,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousInit() {
-    }
+    public void autonomousInit() {}
 
     @Override
     public void autonomousPeriodic() {
@@ -118,9 +119,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {
-
-    }
+    public void teleopInit() {}
 
     @Override
     public void teleopPeriodic() {
@@ -128,7 +127,17 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+        intake.variableIntake(0.5, 0.5);
+        drivebase.set(ControlMode.PercentOutput, 1, 1);
+        Scheduler.getInstance().run();
+    }
+
+    @Override
+    public void testInit() {
+        Scheduler.getInstance().add(new ArmToPos(true, false));
+        Scheduler.getInstance().add(new ArmToPos(false, false));
+    }
 
     public static void initTalon(TalonSRX motor) {
         motor.setNeutralMode(NeutralMode.Brake);

@@ -41,9 +41,9 @@ public class ArcadeDrive extends Command {
         if (outputLeft > 0)
             Robot.drivebase.isDrivingForward = true;
         else if (outputLeft < 0)
-            Robot.drivebase.isDrivingBackwords = true;
+            Robot.drivebase.isDrivingBackwards = true;
         else {
-            Robot.drivebase.isDrivingBackwords = false;
+            Robot.drivebase.isDrivingBackwards = false;
             Robot.drivebase.isDrivingForward = false;
         }
 

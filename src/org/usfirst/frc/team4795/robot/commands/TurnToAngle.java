@@ -10,11 +10,17 @@ public class TurnToAngle extends Command {
     boolean inErrorZone = false;
     int count;
 
+    public TurnToAngle(double angle, double timeout) {
+        requires(Robot.drivebase);
+        Angle = angle;
+        setTimeout(timeout);
+    }
+
     public TurnToAngle(double angle) {
         requires(Robot.drivebase);
         Angle = angle;
     }
-
+    
     protected void initialize() {
         Robot.drivebase.rotateDegrees(Angle);
     }
@@ -27,7 +33,7 @@ public class TurnToAngle extends Command {
 
         if (inErrorZone) {
             count++;
-            if (count >= 5) {
+            if (count >= 6) {
                 isFinished = true;
             } else {
                 isFinished = false;
@@ -38,7 +44,7 @@ public class TurnToAngle extends Command {
     }
 
     protected boolean isFinished() {
-        return isFinished;
+        return isFinished || isTimedOut();
     }
 
     protected void end() {

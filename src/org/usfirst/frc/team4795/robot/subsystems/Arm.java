@@ -22,7 +22,7 @@ public class Arm extends Subsystem {
     public Arm() {
         armMotor = new TalonSRX(RobotMap.ARM_MOTOR.value);
         bagTag = new Servo(RobotMap.BAG_TAG.value);
-        Robot.initTalon(armMotor);
+        Robot.initTalon (armMotor);
 
         armMotor.configOpenloopRamp(0.5, 0);
         armMotor.configClosedloopRamp(0.3, 0);

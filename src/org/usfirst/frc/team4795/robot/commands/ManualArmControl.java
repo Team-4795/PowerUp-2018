@@ -15,7 +15,7 @@ public class ManualArmControl extends Command {
 
     protected void execute() {
 
-        double speed = Robot.intake.hasBox() ? 0.27 : 0.24;
+        double speed = Robot.intake.hasBox() ? 0.33 : 0.28;
 
         // if the speed of the arm is not too fast, then use analog control, otherwise stop the arm
 

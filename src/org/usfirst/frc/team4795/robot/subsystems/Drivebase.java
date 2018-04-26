@@ -21,7 +21,7 @@ public class Drivebase extends Subsystem implements PIDOutput {
 
     public final PIDController turnController;
 
-    private final double kP = -0.04;
+    private final double kP = -0.03;
     private final double kI = 0.00;
     private final double kD = 0.00;
     private final double kF = 0.00;

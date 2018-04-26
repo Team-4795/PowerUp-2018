@@ -13,23 +13,27 @@ public class CenterPositionAuto extends CommandGroup {
         addSequential(new Delay(Robot.delay));
         addSequential(new ArmToPos(false, true));
         addSequential(new ExtendBagTag());
-        addSequential(new DriveFeet(-3.5, speed));
-        addSequential(new TurnToAngle(-90 * gameDataMultiplier));
-        addSequential(new DriveFeet(-4.5, speed));
-        addSequential(new TurnToAngle(90 * gameDataMultiplier));
+        addSequential(new DriveFeet(-3.5, speed, 1.5));
+        addSequential(new TurnToAngle(-90 * gameDataMultiplier, 1.5));
+        addSequential(new DriveFeet(-4, speed, 3));
+        addSequential(new TurnToAngle(90 * gameDataMultiplier, 1.5));
         addSequential(new DriveFeet(-5.5, speed, 3.5));
         addSequential(new AutoIntakeControl(-0.5));
 
+        /*
         // two box
         addSequential(new ArmToPos(true, false));
-        addSequential(new DriveFeet(0.1, speed, 0.5));
-        addSequential(new TurnToAngle(-90 * gameDataMultiplier));
-        addSequential(new AutoIntakeControl(0.5));
-        addSequential(new DriveUntilBox(8, speed / 2));
-        addSequential(new DriveFeet(-3, speed));
-        addSequential(new TurnToAngle(90 * gameDataMultiplier));
+        addSequential(new DriveFeet(0.3, speed, 0.5));
+        addSequential(new TurnToAngle(-110 * gameDataMultiplier, 1.5));
+        addSequential(new AutoIntakeControl(1));
+        addSequential(new DriveUntilBox(8, speed / 1.3));
+        addSequential(new AutoIntakeControl(0.2));
+        addSequential(new DriveFeet(-4.4, speed / 1.3));
+        addSequential(new TurnToAngle(110 * gameDataMultiplier, 1.5));
         addSequential(new ArmToPos(false, true));
-        addSequential(new DriveFeet(-0.1, speed, 0.5));
-        addSequential(new AutoIntakeControl(-0.5));
+        addSequential(new DriveFeet(-1.5, speed, 0.5));
+        addSequential(new Delay(0.5));
+        //addSequential(new AutoIntakeControl(-0.5));
+         */
     }
 }
